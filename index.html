@@ -40,12 +40,14 @@
   <section id="kana" class="section">
     <div class="panel"><div class="row between"><div><h2>🌸 Kana Check</h2><div class="mini">Reconocimiento rápido: primero hiragana, después katakana.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
       <div class="tabs"><button id="hiraTab" class="tab active" onclick="setKanaMode('hira')">Hiragana</button><button id="kataTab" class="tab" onclick="setKanaMode('kata')">Katakana</button><button class="tab" onclick="speakText(currentKana().c)">🔊 Escuchar</button></div>
+      <div class="tabs" style="margin-top:-4px"><button id="kanaBasicTab" class="tab active" onclick="setKanaGroup('basic')">Básicos</button><button id="kanaVoicedTab" class="tab" onclick="setKanaGroup('voiced')">Dakuten / handakuten</button><button id="kanaComboTab" class="tab" onclick="setKanaGroup('combo')">Combinaciones</button><button id="kanaAllTab" class="tab" onclick="setKanaGroup('all')">Todo mezclado</button></div>
+      <div class="mini" style="text-align:center"><b id="kanaSetCount">0</b> elementos en este repaso · <span id="kanaSeenCount">0</span> vistos</div>
       <div class="kana-card"><div><div class="mini">¿Cómo se lee?</div><div id="kanaChar" class="kana"></div><div id="kanaChoices" class="choices"></div><div id="kanaFeedback" class="feedback"></div><div class="row" style="justify-content:center"><button class="secondary" onclick="showMnemonic()">🧠 Pista</button><button class="primary" onclick="nextKana()">Siguiente →</button><button class="secondary" onclick="openWritingFor(currentKana().c)">✍️ Practicarlo</button></div><div id="mnemonic" class="note hidden" style="margin-top:12px"></div></div></div>
     </div>
   </section>
 
   <section id="writing" class="section">
-    <div class="panel"><div class="row between"><div><h2>✍️ Writing Studio</h2><div class="mini">1) Observa el orden. 2) Reprodúcelo. 3) Compara tu trazo.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
+    <div class="panel"><div class="row between"><div><h2>✍️ Writing Studio</h2><div class="mini">Repasa los 46 hiragana y los 46 katakana básicos. En los caracteres con guía animada, observa el orden; en los demás, copia el modelo y compara.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
       <div class="kana-picker" id="writingPicker" style="margin-top:12px"></div>
       <div class="write-layout" style="margin-top:14px">
         <div class="stroke-panel"><h3>① Mira cómo se escribe: <span id="strokeTitle">あ</span></h3><div class="stroke-stage"><svg id="strokeSvg" viewBox="0 0 300 300" aria-label="guía de trazos"></svg></div><div class="row" style="margin-top:10px"><button class="primary" onclick="playStrokes()">▶ Ver trazos</button><button class="secondary" onclick="resetStrokes()">↺ Otra vez</button><button class="secondary" onclick="speakText(activeWriteKana)">🔊 Sonido</button></div><div class="note" style="margin-top:10px">La animación funciona como guía visual. Fíjate en <b>qué trazo va primero</b> y en la dirección general antes de copiar.</div></div>
@@ -104,25 +106,60 @@
   <section id="level" class="section"><div class="panel"><div class="row between"><div><h2>📊 Mi japonés hoy</h2><div class="mini">Se actualiza con los aciertos guardados en este dispositivo.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div><div id="statusGrid" class="status-grid" style="margin-top:14px"></div><div id="routeNote" class="note" style="margin-top:15px"></div><div class="row" style="margin-top:12px"><button class="secondary" onclick="resetProgress()">Reiniciar diagnóstico</button></div></div></section>
 </div>
 <script>
+const basicHira=[
+ ['あ','a'],['い','i'],['う','u'],['え','e'],['お','o'],['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko'],
+ ['さ','sa'],['し','shi'],['す','su'],['せ','se'],['そ','so'],['た','ta'],['ち','chi'],['つ','tsu'],['て','te'],['と','to'],
+ ['な','na'],['に','ni'],['ぬ','nu'],['ね','ne'],['の','no'],['は','ha'],['ひ','hi'],['ふ','fu'],['へ','he'],['ほ','ho'],
+ ['ま','ma'],['み','mi'],['む','mu'],['め','me'],['も','mo'],['や','ya'],['ゆ','yu'],['よ','yo'],['ら','ra'],['り','ri'],
+ ['る','ru'],['れ','re'],['ろ','ro'],['わ','wa'],['を','o / wo'],['ん','n']
+];
+const basicKata=[
+ ['ア','a'],['イ','i'],['ウ','u'],['エ','e'],['オ','o'],['カ','ka'],['キ','ki'],['ク','ku'],['ケ','ke'],['コ','ko'],
+ ['サ','sa'],['シ','shi'],['ス','su'],['セ','se'],['ソ','so'],['タ','ta'],['チ','chi'],['ツ','tsu'],['テ','te'],['ト','to'],
+ ['ナ','na'],['ニ','ni'],['ヌ','nu'],['ネ','ne'],['ノ','no'],['ハ','ha'],['ヒ','hi'],['フ','fu'],['ヘ','he'],['ホ','ho'],
+ ['マ','ma'],['ミ','mi'],['ム','mu'],['メ','me'],['モ','mo'],['ヤ','ya'],['ユ','yu'],['ヨ','yo'],['ラ','ra'],['リ','ri'],
+ ['ル','ru'],['レ','re'],['ロ','ro'],['ワ','wa'],['ヲ','o / wo'],['ン','n']
+];
+const voicedHira=[
+ ['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go'],['ざ','za'],['じ','ji'],['ず','zu'],['ぜ','ze'],['ぞ','zo'],
+ ['だ','da'],['ぢ','ji'],['づ','zu'],['で','de'],['ど','do'],['ば','ba'],['び','bi'],['ぶ','bu'],['べ','be'],['ぼ','bo'],
+ ['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']
+];
+const voicedKata=[
+ ['ガ','ga'],['ギ','gi'],['グ','gu'],['ゲ','ge'],['ゴ','go'],['ザ','za'],['ジ','ji'],['ズ','zu'],['ゼ','ze'],['ゾ','zo'],
+ ['ダ','da'],['ヂ','ji'],['ヅ','zu'],['デ','de'],['ド','do'],['バ','ba'],['ビ','bi'],['ブ','bu'],['ベ','be'],['ボ','bo'],
+ ['パ','pa'],['ピ','pi'],['プ','pu'],['ペ','pe'],['ポ','po']
+];
+const comboHira=[
+ ['きゃ','kya'],['きゅ','kyu'],['きょ','kyo'],['しゃ','sha'],['しゅ','shu'],['しょ','sho'],['ちゃ','cha'],['ちゅ','chu'],['ちょ','cho'],
+ ['にゃ','nya'],['にゅ','nyu'],['にょ','nyo'],['ひゃ','hya'],['ひゅ','hyu'],['ひょ','hyo'],['みゃ','mya'],['みゅ','myu'],['みょ','myo'],
+ ['りゃ','rya'],['りゅ','ryu'],['りょ','ryo'],['ぎゃ','gya'],['ぎゅ','gyu'],['ぎょ','gyo'],['じゃ','ja'],['じゅ','ju'],['じょ','jo'],
+ ['びゃ','bya'],['びゅ','byu'],['びょ','byo'],['ぴゃ','pya'],['ぴゅ','pyu'],['ぴょ','pyo'],['っ','small tsu']
+];
+const comboKata=[
+ ['キャ','kya'],['キュ','kyu'],['キョ','kyo'],['シャ','sha'],['シュ','shu'],['ショ','sho'],['チャ','cha'],['チュ','chu'],['チョ','cho'],
+ ['ニャ','nya'],['ニュ','nyu'],['ニョ','nyo'],['ヒャ','hya'],['ヒュ','hyu'],['ヒョ','hyo'],['ミャ','mya'],['ミュ','myu'],['ミョ','myo'],
+ ['リャ','rya'],['リュ','ryu'],['リョ','ryo'],['ギャ','gya'],['ギュ','gyu'],['ギョ','gyo'],['ジャ','ja'],['ジュ','ju'],['ジョ','jo'],
+ ['ビャ','bya'],['ビュ','byu'],['ビョ','byo'],['ピャ','pya'],['ピュ','pyu'],['ピョ','pyo'],['ッ','small tsu'],['ー','long vowel mark'],
+ ['ウィ','wi'],['ウェ','we'],['ウォ','wo'],['シェ','she'],['ジェ','je'],['チェ','che'],['ファ','fa'],['フィ','fi'],['フェ','fe'],['フォ','fo'],['ティ','ti'],['ディ','di'],['デュ','dyu']
+];
+function kanaMnemonic(c,r){
+ const special={'し':'shi: recuerda que し se lee “shi”.','ち':'chi: ち se lee “chi”.','つ':'tsu: つ se lee “tsu”.','ふ':'fu: ふ se lee “fu”.','を':'Se escribe を y normalmente se pronuncia “o” cuando funciona como partícula.','シ':'Katakana シ = shi. Mira la dirección de sus trazos para distinguirlo de ツ.','ツ':'Katakana ツ = tsu. Compáralo con シ.','ソ':'Katakana ソ = so. Compáralo con ン.','ン':'Katakana ン = n. Compáralo con ソ.','っ':'La っ pequeña duplica la consonante siguiente.','ッ':'La ッ pequeña duplica la consonante siguiente.','ー':'En katakana, ー alarga la vocal anterior.'};
+ return special[c]||('Relaciona '+c+' directamente con el sonido “'+r+'”. Di el sonido en voz alta al verlo.');
+}
+function makeKanaSet(arr){return arr.map(([c,r])=>({c,r,m:kanaMnemonic(c,r)}))}
 const kanaData={
- hira:[
-  {c:'あ',r:'a',opts:['a','o','e','me'],m:'Piensa en una persona abriendo la boca: “Aaa”.'},
-  {c:'き',r:'ki',opts:['ki','sa','chi','ni'],m:'Varias rayitas como una key 🔑: き = ki.'},
-  {c:'せ',r:'se',opts:['se','ke','sa','te'],m:'Una línea cruza y señala: SEñala → せ.'},
-  {c:'ぬ',r:'nu',opts:['nu','ne','me','no'],m:'Una curva como un noodle 🍜 → nu.'},
-  {c:'め',r:'me',opts:['me','nu','wa','ne'],m:'Parece un ojo que “ME mira” 👁️.'},
-  {c:'れ',r:'re',opts:['re','ne','wa','ra'],m:'Una curva que REgresa hacia la derecha.'}
- ],
- kata:[
-  {c:'ア',r:'a',opts:['a','ya','ka','na'],m:'Ángulo abierto: ア = a.'},
-  {c:'カ',r:'ka',opts:['ka','ki','ku','ke'],m:'Parece un filo que corta: KA.'},
-  {c:'ケ',r:'ke',opts:['ke','ku','ka','ko'],m:'Tres trazos abiertos: ケ = ke.'},
-  {c:'テ',r:'te',opts:['te','se','to','chi'],m:'Las líneas de arriba parecen una T: テ.'},
-  {c:'リ',r:'ri',opts:['ri','i','ni','so'],m:'Dos trazos separados: リ = ri.'},
-  {c:'コ',r:'ko',opts:['ko','ro','yo','ku'],m:'Dos líneas como un pequeño corredor: コ.'}
- ]
+ hira:{basic:makeKanaSet(basicHira),voiced:makeKanaSet(voicedHira),combo:makeKanaSet(comboHira)},
+ kata:{basic:makeKanaSet(basicKata),voiced:makeKanaSet(voicedKata),combo:makeKanaSet(comboKata)}
 };
-let kanaMode='hira',kanaIndex=0;
+function getKanaSet(){let d=kanaData[kanaMode];return kanaGroup==='all'?[...d.basic,...d.voiced,...d.combo]:d[kanaGroup]}
+function makeKanaChoices(q){
+ let pool=getKanaSet().filter(x=>x.r!==q.r).map(x=>x.r), out=[q.r];
+ while(out.length<4&&pool.length){let i=Math.floor(Math.random()*pool.length),v=pool.splice(i,1)[0];if(!out.includes(v))out.push(v)}
+ return out.sort(()=>Math.random()-.5)
+}
+
+let kanaMode='hira',kanaGroup='basic',kanaIndex=0,kanaSeen=0;
 
 const lessons={
 1:{title:'Mission 1 — New Friends',subtitle:'Presentarse, identificar personas/cosas, preguntas y の.',
@@ -221,10 +258,11 @@ function earn(skill,n=1){stars+=n;scores[skill]=(scores[skill]||0)+1;save()}
 function openSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='kana')renderKana();if(id==='writing')renderWriting();if(id==='particles')renderParticleDojo();if(id==='level')renderLevel()}
 function goHome(){openSection('home')}
 
-function currentKana(){return kanaData[kanaMode][kanaIndex%kanaData[kanaMode].length]}
-function setKanaMode(m){kanaMode=m;kanaIndex=0;hiraTab.classList.toggle('active',m==='hira');kataTab.classList.toggle('active',m==='kata');renderKana()}
-function renderKana(){let q=currentKana();kanaChar.textContent=q.c;kanaChoices.innerHTML='';kanaFeedback.textContent='';mnemonic.classList.add('hidden');q.opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...kanaChoices.children].forEach(x=>x.disabled=true);if(o===q.r){b.classList.add('correct');kanaFeedback.textContent='🌟 ¡Correcto!';earn('kana')}else{b.classList.add('wrong');kanaFeedback.textContent='La lectura es '+q.r+'.'}};kanaChoices.appendChild(b)})}
-function nextKana(){kanaIndex=(kanaIndex+1)%kanaData[kanaMode].length;renderKana()}
+function currentKana(){let set=getKanaSet();return set[kanaIndex%set.length]}
+function setKanaMode(m){kanaMode=m;kanaIndex=0;kanaSeen=0;hiraTab.classList.toggle('active',m==='hira');kataTab.classList.toggle('active',m==='kata');renderKana()}
+function setKanaGroup(g){kanaGroup=g;kanaIndex=0;kanaSeen=0;['basic','voiced','combo','all'].forEach(x=>document.getElementById('kana'+x.charAt(0).toUpperCase()+x.slice(1)+'Tab').classList.toggle('active',x===g));renderKana()}
+function renderKana(){let set=getKanaSet(),q=currentKana();kanaChar.textContent=q.c;kanaChoices.innerHTML='';kanaFeedback.textContent='';mnemonic.classList.add('hidden');kanaSetCount.textContent=set.length;kanaSeenCount.textContent=Math.min(kanaSeen,set.length);makeKanaChoices(q).forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...kanaChoices.children].forEach(x=>x.disabled=true);if(o===q.r){b.classList.add('correct');kanaFeedback.textContent='🌟 ¡Correcto!';earn('kana')}else{b.classList.add('wrong');kanaFeedback.textContent='La lectura es '+q.r+'.'}};kanaChoices.appendChild(b)})}
+function nextKana(){let set=getKanaSet();kanaSeen++;if(kanaGroup==='all'){let next=Math.floor(Math.random()*set.length);if(set.length>1&&next===kanaIndex)next=(next+1)%set.length;kanaIndex=next}else{kanaIndex=(kanaIndex+1)%set.length}renderKana()}
 function showMnemonic(){mnemonic.textContent=currentKana().m;mnemonic.classList.remove('hidden')}
 
 // Writing: simple animated stroke guides for selected hiragana.
@@ -236,12 +274,13 @@ const strokeDB={
  'め':[{d:'M91 75 Q100 144 132 196',n:[82,70]},{d:'M194 60 Q170 126 139 174 Q111 215 84 210 Q61 205 73 172 Q89 129 139 124 Q195 120 221 156 Q242 188 223 215',n:[184,56]}],
  'れ':[{d:'M105 49 Q105 125 111 229',n:[96,46]},{d:'M74 110 Q108 99 133 90 M110 156 Q150 111 188 103 Q218 96 213 130 Q207 169 213 213 Q217 232 236 225',n:[66,105]}]
 };
-let activeWriteKana='あ';
-function openWritingFor(c){if(strokeDB[c])activeWriteKana=c;openSection('writing')}
-function renderWriting(){writingPicker.innerHTML='';Object.keys(strokeDB).forEach(k=>{let b=document.createElement('button');b.className='kana-pick'+(k===activeWriteKana?' active':'');b.textContent=k;b.onclick=()=>{activeWriteKana=k;renderWriting()};writingPicker.appendChild(b)});strokeTitle.textContent=activeWriteKana;ghost.textContent=activeWriteKana;modelCompare.textContent=activeWriteKana;compareArea.classList.add('hidden');drawStrokeSvg();clearCanvas();ghost.classList.add('hiddenGhost')}
-function drawStrokeSvg(){strokeSvg.innerHTML='';strokeDB[activeWriteKana].forEach((s,i)=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.d);p.setAttribute('class','stroke-path');p.dataset.i=i;strokeSvg.appendChild(p);let t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',s.n[0]);t.setAttribute('y',s.n[1]);t.setAttribute('class','stroke-num');t.textContent=i+1;strokeSvg.appendChild(t)})}
+let activeWriteKana='あ',writeMode='hira';
+const writingSets={hira:basicHira.map(x=>x[0]),kata:basicKata.map(x=>x[0])};
+function openWritingFor(c){activeWriteKana=c;writeMode=basicKata.some(x=>x[0]===c)?'kata':'hira';openSection('writing')}
+function renderWriting(){writingPicker.innerHTML='<button class="tab '+(writeMode==='hira'?'active':'')+'" onclick="writeMode=\'hira\';activeWriteKana=writingSets.hira[0];renderWriting()">Hiragana</button><button class="tab '+(writeMode==='kata'?'active':'')+'" onclick="writeMode=\'kata\';activeWriteKana=writingSets.kata[0];renderWriting()">Katakana</button>';writingSets[writeMode].forEach(k=>{let b=document.createElement('button');b.className='kana-pick'+(k===activeWriteKana?' active':'');b.textContent=k;b.onclick=()=>{activeWriteKana=k;renderWriting()};writingPicker.appendChild(b)});strokeTitle.textContent=activeWriteKana;ghost.textContent=activeWriteKana;modelCompare.textContent=activeWriteKana;compareArea.classList.add('hidden');drawStrokeSvg();clearCanvas();ghost.classList.add('hiddenGhost')}
+function drawStrokeSvg(){strokeSvg.innerHTML='';if(!strokeDB[activeWriteKana]){let t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x','150');t.setAttribute('y','205');t.setAttribute('text-anchor','middle');t.setAttribute('font-size','210');t.setAttribute('font-family','Noto Sans JP, sans-serif');t.setAttribute('fill','#25232b');t.textContent=activeWriteKana;strokeSvg.appendChild(t);let n=document.createElementNS('http://www.w3.org/2000/svg','text');n.setAttribute('x','150');n.setAttribute('y','275');n.setAttribute('text-anchor','middle');n.setAttribute('font-size','14');n.setAttribute('fill','#6f6878');n.textContent='Modelo visual para copiar';strokeSvg.appendChild(n);return}strokeDB[activeWriteKana].forEach((s,i)=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.d);p.setAttribute('class','stroke-path');p.dataset.i=i;strokeSvg.appendChild(p);let t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',s.n[0]);t.setAttribute('y',s.n[1]);t.setAttribute('class','stroke-num');t.textContent=i+1;strokeSvg.appendChild(t)})}
 function resetStrokes(){drawStrokeSvg()}
-function playStrokes(){drawStrokeSvg();let ps=[...strokeSvg.querySelectorAll('.stroke-path')];ps.forEach((p,i)=>setTimeout(()=>p.classList.add('play'),i*850))}
+function playStrokes(){drawStrokeSvg();let ps=[...strokeSvg.querySelectorAll('.stroke-path')];if(!ps.length){return}ps.forEach((p,i)=>setTimeout(()=>p.classList.add('play'),i*850))}
 function toggleGhost(){ghost.classList.toggle('hiddenGhost')}
 function showCompare(){studentCompare.src=canvas.toDataURL();compareArea.classList.remove('hidden');earn('kana')}
 

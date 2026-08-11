@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Nihongo Comeback! — Genki 1–5</title>
+<style>
+:root{--bg:#fff8f7;--card:#fff;--ink:#25232b;--muted:#6f6878;--pink:#ef476f;--yellow:#ffd166;--green:#06d6a0;--blue:#4cc9f0;--purple:#8b5cf6;--line:#ece7f0;--shadow:0 14px 34px rgba(45,28,60,.12)}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:linear-gradient(180deg,#fff8f7,#f4f7ff);color:var(--ink)}button{font:inherit;touch-action:manipulation}.app{max-width:1180px;margin:auto;padding:16px 16px 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#ef476f,#ff9ab3);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.brand h1{font-size:clamp(20px,3vw,31px);margin:0}.muted,.mini{color:var(--muted)}.mini{font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
+.section{display:none}.section.active{display:block}.panel{background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:var(--shadow);margin-top:16px}.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;background:linear-gradient(135deg,#fff,#fff2f5);border:1px solid #f4dce3;border-radius:28px;padding:22px;box-shadow:var(--shadow)}.hero h2{font-size:clamp(31px,5vw,52px);margin-bottom:8px}.mascot{min-height:210px;border-radius:24px;background:radial-gradient(circle at 48% 38%,#fff 0 23%,#ffd4df 24% 45%,#ff9bb4 46% 100%);display:grid;place-items:center;font-size:86px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.between{justify-content:space-between}.primary,.secondary,.success,.warning{border:0;border-radius:16px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:var(--pink);color:#fff}.secondary{background:#f2eff6;color:var(--ink)}.success{background:var(--green);color:#063d31}.warning{background:var(--yellow);color:#4c3900}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:16px}.menu{border:0;border-radius:22px;background:#fff;padding:18px;text-align:left;box-shadow:var(--shadow);cursor:pointer;transition:.16s}.menu:hover{transform:translateY(-3px)}.menu .ico{font-size:32px}.menu b{display:block;margin-top:7px;font-size:17px}.menu small{display:block;margin-top:4px;color:var(--muted);line-height:1.35}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{border:0;background:#f2eff6;border-radius:999px;padding:10px 14px;font-weight:750;cursor:pointer}.tab.active{background:#282530;color:#fff}.lesson-chips{display:flex;gap:10px;flex-wrap:wrap}.lesson-chip{border:2px solid transparent;background:#f5f2f8;border-radius:18px;padding:12px 14px;font-weight:800;cursor:pointer}.lesson-chip.active{border-color:var(--pink);background:#fff0f4}.mission-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.mission{border:0;background:#f7f5fa;border-radius:18px;padding:14px 8px;cursor:pointer;font-weight:800}.mission .ico{font-size:26px;display:block;margin-bottom:5px}.hidden{display:none!important}.note{background:#fff6d8;color:#59450d;border-radius:15px;padding:12px 14px;line-height:1.45}.goodnote{background:#ebfff8;color:#074a3a}.badnote{background:#fff0f3;color:#7b1f36}
+/* Kana */.kana-card{text-align:center;min-height:300px;display:grid;place-items:center}.kana{font-size:112px;line-height:1}.choices{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px;width:min(580px,100%);margin:14px auto 0}.choice{border:2px solid var(--line);background:#fff;border-radius:17px;padding:14px;font-size:19px;cursor:pointer}.choice.correct{border-color:var(--green);background:#ebfff8}.choice.wrong{border-color:var(--pink);background:#fff0f3}.feedback{font-weight:800;min-height:28px;margin-top:10px}
+/* Flashcards */.flash{perspective:1000px;max-width:720px;margin:auto}.flash-inner{position:relative;min-height:300px;transform-style:preserve-3d;transition:.45s;cursor:pointer}.flash.flipped .flash-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--line);display:grid;place-items:center;text-align:center;padding:22px;background:linear-gradient(135deg,#fff,#f8f4ff)}.back{transform:rotateY(180deg);background:linear-gradient(135deg,#fff7db,#fff)}.jp{font-size:clamp(42px,8vw,68px);font-weight:850}.meaning{font-size:26px}
+/* Grammar */.builder{display:grid;gap:12px}.tokens,.zone{min-height:65px;display:flex;gap:9px;flex-wrap:wrap;padding:11px;border-radius:17px;background:#f7f5fa}.zone{background:#fff;border:2px dashed #cfc7db}.token{border:0;background:#fff;border-radius:13px;padding:11px 14px;box-shadow:0 4px 12px rgba(0,0,0,.07);font-size:19px;cursor:pointer}.grammarPrompt{font-size:20px;font-weight:800}
+/* Particles */.particle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.particle-card{border:0;border-radius:20px;padding:16px;background:#f7f5fa;cursor:pointer;text-align:left}.particle-card strong{font-size:32px}.particle-card span{display:block;color:var(--muted);margin-top:4px}.particle-sentence{font-size:clamp(28px,5vw,48px);font-weight:850;text-align:center;margin:18px}.blank{display:inline-block;min-width:52px;border-bottom:4px solid var(--pink);color:var(--pink)}
+/* Speaking */.speak{text-align:center}.phrase{font-size:clamp(30px,6vw,60px);font-weight:850;margin:16px}.mic{width:82px;height:82px;border:0;border-radius:50%;background:var(--pink);color:#fff;font-size:32px;box-shadow:0 10px 22px rgba(239,71,111,.33);cursor:pointer}
+/* Writing */.write-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:15px}.stroke-panel,.practice-panel{border-radius:21px;background:#f8f6fb;padding:15px}.stroke-stage{position:relative;height:300px;background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden}.stroke-stage svg{width:100%;height:100%}.stroke-path{fill:none;stroke:#24222a;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:600;stroke-dashoffset:600}.stroke-path.play{animation:drawStroke .8s ease forwards}.stroke-num{font-weight:900;fill:var(--pink);font-size:18px}@keyframes drawStroke{to{stroke-dashoffset:0}}.draw-wrap{position:relative;height:300px;background:#fff;border:2px dashed #d6cfdf;border-radius:18px;overflow:hidden}.gridline{position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.6%,#eee 50%,transparent 50.4%),linear-gradient(0deg,transparent 49.6%,#eee 50%,transparent 50.4%);pointer-events:none}.ghost{position:absolute;inset:0;display:grid;place-items:center;font-size:210px;color:rgba(80,70,90,.12);pointer-events:none}.ghost.hiddenGhost{opacity:0}.draw{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.kana-picker{display:flex;gap:8px;flex-wrap:wrap}.kana-pick{border:0;background:#eeeaf4;border-radius:12px;padding:9px 12px;font-size:22px;cursor:pointer}.kana-pick.active{background:var(--pink);color:#fff}.check-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.compare-box{min-height:180px;border-radius:18px;background:#f8f6fb;display:grid;place-items:center;font-size:120px}
+/* Level */.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.skill{padding:15px;border-radius:18px;background:#f7f5fa}.bar{height:10px;background:#e7e3ec;border-radius:999px;overflow:hidden;margin-top:8px}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--yellow))}.lesson-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.lesson-box{padding:13px;background:#f7f5fa;border-radius:16px;text-align:center}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.mission-grid{grid-template-columns:repeat(3,1fr)}.write-layout{grid-template-columns:1fr}.particle-grid{grid-template-columns:1fr 1fr}.status-grid{grid-template-columns:1fr 1fr}.lesson-summary{grid-template-columns:1fr 1fr}.mascot{min-height:140px}}
+@media(max-width:560px){.app{padding:11px}.grid,.status-grid,.lesson-summary,.choices{grid-template-columns:1fr}.mission-grid{grid-template-columns:1fr 1fr}.particle-grid{grid-template-columns:1fr 1fr}.panel{padding:14px}.kana{font-size:88px}.write-layout{grid-template-columns:1fr}.stroke-stage,.draw-wrap{height:270px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Lecciones 1–5</div></div></div>
+    <div class="pill">⭐ <span id="stars">0</span></div>
+  </header>
+
+  <section id="home" class="section active">
+    <div class="hero"><div><h2>日本語へおかえり！</h2><p class="muted" style="font-size:18px;line-height:1.5">No repetimos el curso desde cero. Revisamos kana, vocabulario, pronunciación, partículas y gramática; después detectamos exactamente dónde conviene retomar.</p><div class="row" style="margin-top:15px"><button class="primary" onclick="openSection('kana')">Empezar Kana Check</button><button class="secondary" onclick="openLesson(1)">Ir a Genki 1–5</button></div></div><div class="mascot">🐱</div></div>
+    <div class="grid">
+      <button class="menu" onclick="openSection('kana')"><span class="ico">🌸</span><b>Hiragana + Katakana</b><small>Lectura rápida, sonido y mnemotecnia.</small></button>
+      <button class="menu" onclick="openSection('writing')"><span class="ico">✍️</span><b>Writing Studio</b><small>Ver trazos, practicar en pantalla y comparar.</small></button>
+      <button class="menu" onclick="openSection('particles')"><span class="ico">🧩</span><b>Particle Dojo</b><small>は・の・も・を・で・に・へ y más.</small></button>
+      <button class="menu" onclick="openLesson(1)"><span class="ico">🎮</span><b>Genki 1–5</b><small>Repaso por misión, no por clase tradicional.</small></button>
+    </div>
+    <div class="panel"><div class="between row"><div><h3 style="margin-bottom:4px">Ruta rápida para la clase de hoy</h3><div class="mini">10–15 min de diagnóstico + 15–25 min de misión Genki</div></div><button class="secondary" onclick="openSection('level')">📊 Ver progreso</button></div><div class="lesson-summary" style="margin-top:14px"><div class="lesson-box"><b>1</b><br>New Friends</div><div class="lesson-box"><b>2</b><br>Shopping</div><div class="lesson-box"><b>3</b><br>Making a Date</div><div class="lesson-box"><b>4</b><br>The First Date</div><div class="lesson-box"><b>5</b><br>Okinawa</div></div></div>
+  </section>
+
+  <section id="kana" class="section">
+    <div class="panel"><div class="row between"><div><h2>🌸 Kana Check</h2><div class="mini">Reconocimiento rápido: primero hiragana, después katakana.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
+      <div class="tabs"><button id="hiraTab" class="tab active" onclick="setKanaMode('hira')">Hiragana</button><button id="kataTab" class="tab" onclick="setKanaMode('kata')">Katakana</button><button class="tab" onclick="speakText(currentKana().c)">🔊 Escuchar</button></div>
+      <div class="kana-card"><div><div class="mini">¿Cómo se lee?</div><div id="kanaChar" class="kana"></div><div id="kanaChoices" class="choices"></div><div id="kanaFeedback" class="feedback"></div><div class="row" style="justify-content:center"><button class="secondary" onclick="showMnemonic()">🧠 Pista</button><button class="primary" onclick="nextKana()">Siguiente →</button><button class="secondary" onclick="openWritingFor(currentKana().c)">✍️ Practicarlo</button></div><div id="mnemonic" class="note hidden" style="margin-top:12px"></div></div></div>
+    </div>
+  </section>
+
+  <section id="writing" class="section">
+    <div class="panel"><div class="row between"><div><h2>✍️ Writing Studio</h2><div class="mini">1) Observa el orden. 2) Reprodúcelo. 3) Compara tu trazo.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
+      <div class="kana-picker" id="writingPicker" style="margin-top:12px"></div>
+      <div class="write-layout" style="margin-top:14px">
+        <div class="stroke-panel"><h3>① Mira cómo se escribe: <span id="strokeTitle">あ</span></h3><div class="stroke-stage"><svg id="strokeSvg" viewBox="0 0 300 300" aria-label="guía de trazos"></svg></div><div class="row" style="margin-top:10px"><button class="primary" onclick="playStrokes()">▶ Ver trazos</button><button class="secondary" onclick="resetStrokes()">↺ Otra vez</button><button class="secondary" onclick="speakText(activeWriteKana)">🔊 Sonido</button></div><div class="note" style="margin-top:10px">La animación funciona como guía visual. Fíjate en <b>qué trazo va primero</b> y en la dirección general antes de copiar.</div></div>
+        <div class="practice-panel"><h3>② Ahora tú</h3><div class="draw-wrap"><div class="gridline"></div><div id="ghost" class="ghost hiddenGhost">あ</div><canvas id="drawCanvas" class="draw" width="600" height="360"></canvas></div><div class="row" style="margin-top:10px"><button class="secondary" onclick="clearCanvas()">🧽 Borrar</button><button class="warning" onclick="toggleGhost()">👁 Mostrar guía</button><button class="success" onclick="showCompare()">✓ Comparar</button></div></div>
+      </div>
+      <div id="compareArea" class="panel hidden" style="box-shadow:none"><h3>③ Checa tu escritura</h3><div class="check-split"><div><div class="mini">Modelo</div><div id="modelCompare" class="compare-box">あ</div></div><div><div class="mini">Tu trazo</div><div class="compare-box"><img id="studentCompare" style="max-width:100%;max-height:175px" alt="tu escritura"></div></div></div><div class="note goodnote" style="margin-top:10px">Compárala por forma, tamaño y posición. Si no se parece todavía, borra y haz un segundo intento.</div></div>
+    </div>
+  </section>
+
+  <section id="particles" class="section">
+    <div class="panel"><div class="row between"><div><h2>🧩 Particle Dojo</h2><div class="mini">Repaso acumulativo de partículas vistas hasta Genki 5.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
+      <div id="particleCards" class="particle-grid" style="margin-top:14px"></div>
+      <div class="panel" style="box-shadow:none"><div class="mini">Elige la partícula correcta</div><div id="particleSentence" class="particle-sentence"></div><div id="particleChoices" class="choices"></div><div id="particleFeedback" class="feedback" style="text-align:center"></div><div class="row" style="justify-content:center"><button class="primary" onclick="nextParticleQuiz()">Siguiente →</button><button class="secondary" onclick="speakText(particleQuiz[particleQuizIndex].spoken)">🔊 Escuchar oración</button></div></div>
+    </div>
+  </section>
+
+  <section id="lessons" class="section">
+    <div class="panel"><div class="row between"><div><h2 id="lessonTitle">Mission 1</h2><div id="lessonSubtitle" class="mini"></div></div><button class="secondary" onclick="goHome()">← Inicio</button></div>
+      <div id="lessonChips" class="lesson-chips" style="margin-top:13px"></div>
+      <div class="mission-grid" style="margin-top:14px">
+        <button class="mission" onclick="showLessonMode('vocab')"><span class="ico">🃏</span>Vocabulario</button>
+        <button class="mission" onclick="showLessonMode('listen')"><span class="ico">🎧</span>Escucha</button>
+        <button class="mission" onclick="showLessonMode('speak')"><span class="ico">🎙️</span>Pronuncia</button>
+        <button class="mission" onclick="showLessonMode('grammar')"><span class="ico">🧠</span>Gramática</button>
+        <button class="mission" onclick="showLessonMode('lessonParticles')"><span class="ico">🧩</span>Partículas</button>
+        <button class="mission" onclick="showLessonMode('boss')"><span class="ico">🏯</span>Mini Boss</button>
+      </div>
+    </div>
+
+    <div id="vocab" class="panel lessonMode"><div class="row between"><div><h3>🃏 Flashcards</h3><div class="mini">Tócala para voltear. Escucha y luego repite sin mirar.</div></div><button class="secondary" onclick="speakText(currentVocab()[0])">🔊 Audio</button></div><div id="flash" class="flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="face"><div><div id="flashJP" class="jp"></div><div class="mini">Toca para revelar</div></div></div><div class="face back"><div><div id="flashKanji" class="jp" style="font-size:48px"></div><div id="flashMeaning" class="meaning"></div></div></div></div></div><div class="row" style="justify-content:center;margin-top:12px"><button class="warning" onclick="markVocab(false)">🔄 Repasar</button><button class="success" onclick="markVocab(true)">✓ La recuerdo</button><button class="primary" onclick="nextVocab()">Siguiente →</button></div></div>
+
+    <div id="listen" class="panel lessonMode hidden"><div style="text-align:center"><h3>🎧 Escucha y elige</h3><div class="mini">No leas la palabra primero. Escucha y busca el significado.</div><button class="primary" style="font-size:22px;margin:10px" onclick="playListen()">▶ Escuchar</button><div id="listenChoices" class="choices"></div><div id="listenFeedback" class="feedback"></div><button class="secondary" onclick="renderListen()">Otra palabra</button></div></div>
+
+    <div id="speak" class="panel lessonMode hidden"><div class="speak"><h3>🎙️ Shadowing</h3><div class="mini">Escucha una vez. Después intenta decirla completa.</div><div id="speakPhrase" class="phrase"></div><div id="speakMeaning" class="mini"></div><div class="row" style="justify-content:center;margin-top:12px"><button class="secondary" onclick="speakText(document.getElementById('speakPhrase').textContent)">🔊 Escuchar</button><button class="mic" onclick="startRecognition()">🎙️</button><button class="secondary" onclick="nextSpeak()">Otra frase →</button></div><div id="speechResult" class="feedback">Pulsa el micrófono cuando estés lista.</div></div></div>
+
+    <div id="grammar" class="panel lessonMode hidden"><h3>🧠 Construye la oración</h3><div id="grammarPrompt" class="grammarPrompt"></div><div class="builder" style="margin-top:12px"><div id="tokens" class="tokens"></div><div id="sentenceZone" class="zone"></div><div class="row"><button class="primary" onclick="checkGrammar()">Comprobar</button><button class="secondary" onclick="resetGrammar()">Reiniciar</button><button class="secondary" onclick="toggleGrammarTip()">🧠 Pista</button><button class="secondary" onclick="nextGrammar()">Otra →</button></div><div id="grammarFeedback" class="feedback"></div><div id="grammarTip" class="note hidden"></div></div></div>
+
+    <div id="lessonParticles" class="panel lessonMode hidden"><h3>🧩 Partículas de esta etapa</h3><div id="lessonParticleInfo" class="particle-grid"></div><div class="note" style="margin-top:12px">Tip: no memorices sólo “は = tema” o “を = objeto”. Lee la oración completa y pregunta qué relación tiene cada palabra con el verbo.</div><div class="row" style="margin-top:12px"><button class="primary" onclick="openSection('particles')">Entrar al Particle Dojo →</button></div></div>
+
+    <div id="boss" class="panel lessonMode hidden"><div style="text-align:center"><h3>🏯 Mini Boss</h3><div class="mini">Una pregunta mezclada de la lección. Cambia cada vez.</div><div id="bossPrompt" class="phrase" style="font-size:36px"></div><div id="bossChoices" class="choices"></div><div id="bossFeedback" class="feedback"></div><button class="primary" onclick="renderBoss()">Nuevo reto →</button></div></div>
+  </section>
+
+  <section id="level" class="section"><div class="panel"><div class="row between"><div><h2>📊 Mi japonés hoy</h2><div class="mini">Se actualiza con los aciertos guardados en este dispositivo.</div></div><button class="secondary" onclick="goHome()">← Inicio</button></div><div id="statusGrid" class="status-grid" style="margin-top:14px"></div><div id="routeNote" class="note" style="margin-top:15px"></div><div class="row" style="margin-top:12px"><button class="secondary" onclick="resetProgress()">Reiniciar diagnóstico</button></div></div></section>
+</div>
+<script>
+const kanaData={
+ hira:[
+  {c:'あ',r:'a',opts:['a','o','e','me'],m:'Piensa en una persona abriendo la boca: “Aaa”.'},
+  {c:'き',r:'ki',opts:['ki','sa','chi','ni'],m:'Varias rayitas como una key 🔑: き = ki.'},
+  {c:'せ',r:'se',opts:['se','ke','sa','te'],m:'Una línea cruza y señala: SEñala → せ.'},
+  {c:'ぬ',r:'nu',opts:['nu','ne','me','no'],m:'Una curva como un noodle 🍜 → nu.'},
+  {c:'め',r:'me',opts:['me','nu','wa','ne'],m:'Parece un ojo que “ME mira” 👁️.'},
+  {c:'れ',r:'re',opts:['re','ne','wa','ra'],m:'Una curva que REgresa hacia la derecha.'}
+ ],
+ kata:[
+  {c:'ア',r:'a',opts:['a','ya','ka','na'],m:'Ángulo abierto: ア = a.'},
+  {c:'カ',r:'ka',opts:['ka','ki','ku','ke'],m:'Parece un filo que corta: KA.'},
+  {c:'ケ',r:'ke',opts:['ke','ku','ka','ko'],m:'Tres trazos abiertos: ケ = ke.'},
+  {c:'テ',r:'te',opts:['te','se','to','chi'],m:'Las líneas de arriba parecen una T: テ.'},
+  {c:'リ',r:'ri',opts:['ri','i','ni','so'],m:'Dos trazos separados: リ = ri.'},
+  {c:'コ',r:'ko',opts:['ko','ro','yo','ku'],m:'Dos líneas como un pequeño corredor: コ.'}
+ ]
+};
+let kanaMode='hira',kanaIndex=0;
+
+const lessons={
+1:{title:'Mission 1 — New Friends',subtitle:'Presentarse, identificar personas/cosas, preguntas y の.',
+ vocab:[['がくせい','学生','estudiante'],['せんせい','先生','maestro/a'],['ともだち','友達','amigo/a'],['にほん','日本','Japón'],['だいがく','大学','universidad'],['なまえ','名前','nombre'],['せんこう','専攻','especialidad / carrera'],['りゅうがくせい','留学生','estudiante internacional']],
+ speak:[['わたしはアナです。','Soy Ana.'],['せんこうはにほんごです。','Mi especialidad es japonés.'],['りゅうがくせいですか。','¿Eres estudiante internacional?']],
+ grammar:[
+  {p:'“Soy estudiante.”',a:['わたし','は','がくせい','です'],tip:'X は Y です identifica X como Y. は marca el tema.'},
+  {p:'“La especialidad de Mary es japonés.”',a:['メアリー','の','せんこう','は','にほんご','です'],tip:'の conecta dos sustantivos: メアリーのせんこう = la especialidad de Mary.'},
+  {p:'“¿Eres estudiante?”',a:['がくせい','です','か'],tip:'か al final convierte la oración cortés en pregunta.'}
+ ],particles:[['は','tema','わたしは がくせいです'],['の','relación / posesión','メアリーの せんこう'],['か','pregunta','がくせいですか']],
+ boss:[['わたし ___ がくせいです。','は',['は','を','で','に']],['メアリー ___ せんこう','の',['の','も','へ','を']],['がくせいです ___。','か',['か','は','の','で']]]},
+2:{title:'Mission 2 — Shopping',subtitle:'これ・それ・あれ, lugares, も, negación y expresiones de compra.',
+ vocab:[['これ','','esto'],['それ','','eso'],['あれ','','aquello'],['どれ','','cuál'],['ここ','','aquí'],['そこ','','ahí'],['あそこ','','allá'],['いくら','','cuánto cuesta']],
+ speak:[['これはいくらですか。','¿Cuánto cuesta esto?'],['それはさんぜんえんです。','Eso cuesta 3,000 yenes.'],['これはわたしのかばんです。','Esta es mi bolsa.']],
+ grammar:[
+  {p:'“¿Cuánto cuesta esto?”',a:['これ','は','いくら','です','か'],tip:'これ funciona solo: “esto”. いくら pregunta el precio.'},
+  {p:'“Este libro es mío.”',a:['この','ほん','は','わたし','の','です'],tip:'この siempre necesita un sustantivo: このほん. の puede sustituir al sustantivo ya entendido.'},
+  {p:'“Eso también es japonés.”',a:['それ','も','にほんご','です'],tip:'も significa “también” y puede reemplazar a は en este tipo de oración.'}
+ ],particles:[['も','también','それも にほんごです'],['の','posesión','わたしの かばん'],['は','tema','これは いくらですか']],
+ boss:[['これ ___ いくらですか。','は',['は','を','へ','で']],['それ ___ わたしのです。','も',['も','に','で','を']],['この ___ は せんえんです。','ほん',['ほん','これ','どれ','ここ']]]},
+3:{title:'Mission 3 — Making a Date',subtitle:'Verbos en presente, lugares, tiempo, frecuencia y partículas con verbos.',
+ vocab:[['たべる','食べる','comer'],['のむ','飲む','beber'],['みる','見る','ver / mirar'],['よむ','読む','leer'],['きく','聞く','escuchar'],['いく','行く','ir'],['かえる','帰る','regresar'],['べんきょうする','勉強する','estudiar']],
+ speak:[['まいにちにほんごをべんきょうします。','Estudio japonés todos los días.'],['としょかんでほんをよみます。','Leo un libro en la biblioteca.'],['きょうとにいきませんか。','¿Quieres ir a Kioto?']],
+ grammar:[
+  {p:'“Leo un libro en la biblioteca.”',a:['としょかん','で','ほん','を','よみます'],tip:'で = lugar donde ocurre la acción. を = objeto directo.'},
+  {p:'“Voy a Kioto mañana.”',a:['あした','きょうと','に','いきます'],tip:'に marca destino con verbos como 行きます. También puede usarse へ.'},
+  {p:'“¿Quieres ver una película?”',a:['えいが','を','みません','か'],tip:'〜ませんか es una invitación cortés: “¿te gustaría...?”'}
+ ],particles:[['を','objeto directo','コーヒーを のみます'],['で','lugar de acción','としょかんで よみます'],['に','destino / tiempo','きょうとに いきます'],['へ','dirección','にほんへ いきます'],['は','tema / contraste','わたしは いきます']],
+ boss:[['としょかん ___ ほんをよみます。','で',['で','を','は','の']],['コーヒー ___ のみます。','を',['を','に','へ','も']],['きょうと ___ いきます。','に',['に','を','で','の']]]},
+4:{title:'Mission 4 — The First Date',subtitle:'あります・います, ubicación y pasado de です / verbos.',
+ vocab:[['ある','','haber / estar (cosas)'],['いる','','haber / estar (seres vivos)'],['みぎ','右','derecha'],['ひだり','左','izquierda'],['まえ','前','delante'],['うしろ','後ろ','detrás'],['なか','中','dentro'],['となり','隣','al lado']],
+ speak:[['つくえのうえにほんがあります。','Hay un libro encima del escritorio.'],['ねこはいすのしたにいます。','El gato está debajo de la silla.'],['きのうえいがをみました。','Ayer vi una película.']],
+ grammar:[
+  {p:'“Hay un libro sobre el escritorio.”',a:['つくえ','の','うえ','に','ほん','が','あります'],tip:'Lugar + に + cosa + が + あります. Para seres vivos se usa います.'},
+  {p:'“Ayer vi una película.”',a:['きのう','えいが','を','みました'],tip:'〜ました es pasado afirmativo cortés de los verbos.'},
+  {p:'“No estudié japonés ayer.”',a:['きのう','にほんご','を','べんきょうしませんでした'],tip:'〜ませんでした = pasado negativo cortés.'}
+ ],particles:[['に','lugar de existencia','つくえのうえに あります'],['が','lo que existe','ほんが あります'],['の','relación espacial','つくえのうえ'],['を','objeto','えいがを みました']],
+ boss:[['ねこは いすのした ___ います。','に',['に','で','を','へ']],['ほん ___ あります。','が',['が','を','で','へ']],['きのう えいがを ___。','みました',['みました','みます','みません','みるです']]]},
+5:{title:'Mission 5 — A Trip to Okinawa',subtitle:'Adjetivos い / な, gustos, pasado de adjetivos y propuestas.',
+ vocab:[['おおきい','大きい','grande'],['ちいさい','小さい','pequeño'],['たかい','高い','caro / alto'],['やすい','安い','barato'],['おもしろい','面白い','interesante'],['きれい','','bonito / limpio'],['しずか','静か','tranquilo'],['すき','好き','gustar / favorito']],
+ speak:[['おきなわはあつかったです。','Okinawa estuvo caluroso.'],['うみはきれいでした。','El mar estuvo bonito.'],['わたしはねこがすきです。','Me gustan los gatos.']],
+ grammar:[
+  {p:'“Okinawa estuvo caluroso.”',a:['おきなわ','は','あつかった','です'],tip:'En adjetivos い, el pasado afirmativo termina en 〜かったです.'},
+  {p:'“El mar estuvo bonito.”',a:['うみ','は','きれい','でした'],tip:'Los adjetivos な usan でした para el pasado afirmativo.'},
+  {p:'“Me gustan los gatos.”',a:['わたし','は','ねこ','が','すき','です'],tip:'Con 好き, la cosa que gusta suele marcarse con が.'}
+ ],particles:[['が','objeto de gusto','ねこが すきです'],['は','tema','おきなわは あつかったです'],['の','modifica sustantivos','しずかな まち / にほんの まち']],
+ boss:[['わたしは ねこ ___ すきです。','が',['が','を','で','へ']],['おきなわは あつ___です。','かった',['かった','いでした','でした','く']],['うみは きれい ___。','でした',['でした','かったです','ます','ません']]]}
+};
+
+const particleInfo=[['は','Tema / contraste','わたしは がくせいです。'],['の','Posesión / relación','メアリーの ほん'],['も','También','わたしも がくせいです。'],['を','Objeto directo','ほんを よみます。'],['で','Lugar donde ocurre una acción','としょかんで よみます。'],['に','Destino / hora / lugar de existencia','7じに おきます。'],['へ','Dirección','にほんへ いきます。'],['が','Sujeto de existencia / gusto','ねこが います。']];
+const particleQuiz=[
+ {html:'わたし <span class="blank">___</span> がくせいです。',a:'は',opts:['は','を','で','に'],spoken:'わたしはがくせいです。',why:'は marca el tema: “en cuanto a mí...”'},
+ {html:'ほん <span class="blank">___</span> よみます。',a:'を',opts:['を','で','へ','の'],spoken:'ほんをよみます。',why:'を marca el objeto directo de よみます.'},
+ {html:'としょかん <span class="blank">___</span> べんきょうします。',a:'で',opts:['で','に','を','も'],spoken:'としょかんでべんきょうします。',why:'で marca el lugar donde ocurre una acción.'},
+ {html:'7じ <span class="blank">___</span> おきます。',a:'に',opts:['に','で','を','の'],spoken:'しちじにおきます。',why:'に marca una hora específica.'},
+ {html:'きょうと <span class="blank">___</span> いきます。',a:'へ',opts:['へ','を','の','も'],spoken:'きょうとへいきます。',why:'へ marca dirección. Con 行きます también puede usarse に.'},
+ {html:'メアリー <span class="blank">___</span> ほん',a:'の',opts:['の','は','で','を'],spoken:'メアリーのほん',why:'の conecta dos sustantivos: “el libro de Mary”.'},
+ {html:'わたし <span class="blank">___</span> にほんごをべんきょうします。',a:'も',opts:['も','を','が','へ'],spoken:'わたしもにほんごをべんきょうします。',why:'も significa “también”.'},
+ {html:'ねこ <span class="blank">___</span> います。',a:'が',opts:['が','を','で','へ'],spoken:'ねこがいます。',why:'が marca aquello que existe en あります／います.'}
+];
+
+let stars=Number(localStorage.getItem('jpStars2')||0);document.getElementById('stars').textContent=stars;
+let scores=JSON.parse(localStorage.getItem('jpScores2')||'{"kana":0,"vocab":0,"listen":0,"speak":0,"grammar":0,"particles":0}');
+function save(){localStorage.setItem('jpStars2',stars);localStorage.setItem('jpScores2',JSON.stringify(scores));document.getElementById('stars').textContent=stars}
+function earn(skill,n=1){stars+=n;scores[skill]=(scores[skill]||0)+1;save()}
+function openSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='kana')renderKana();if(id==='writing')renderWriting();if(id==='particles')renderParticleDojo();if(id==='level')renderLevel()}
+function goHome(){openSection('home')}
+
+function currentKana(){return kanaData[kanaMode][kanaIndex%kanaData[kanaMode].length]}
+function setKanaMode(m){kanaMode=m;kanaIndex=0;hiraTab.classList.toggle('active',m==='hira');kataTab.classList.toggle('active',m==='kata');renderKana()}
+function renderKana(){let q=currentKana();kanaChar.textContent=q.c;kanaChoices.innerHTML='';kanaFeedback.textContent='';mnemonic.classList.add('hidden');q.opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...kanaChoices.children].forEach(x=>x.disabled=true);if(o===q.r){b.classList.add('correct');kanaFeedback.textContent='🌟 ¡Correcto!';earn('kana')}else{b.classList.add('wrong');kanaFeedback.textContent='La lectura es '+q.r+'.'}};kanaChoices.appendChild(b)})}
+function nextKana(){kanaIndex=(kanaIndex+1)%kanaData[kanaMode].length;renderKana()}
+function showMnemonic(){mnemonic.textContent=currentKana().m;mnemonic.classList.remove('hidden')}
+
+// Writing: simple animated stroke guides for selected hiragana.
+const strokeDB={
+ 'あ':[{d:'M86 78 Q132 70 190 60',n:[80,68]},{d:'M144 45 Q132 132 138 221',n:[134,44]},{d:'M83 159 Q117 125 169 129 Q224 133 221 180 Q218 226 166 239 Q111 250 84 218 Q62 192 83 159 M134 166 Q159 149 185 138',n:[72,158]}],
+ 'き':[{d:'M73 75 Q140 70 212 59',n:[68,67]},{d:'M70 116 Q143 110 224 98',n:[64,108]},{d:'M143 45 Q151 112 175 167',n:[136,43]},{d:'M100 185 Q131 166 183 173 Q222 178 211 215 Q203 240 156 235 Q116 230 103 207',n:[91,184]}],
+ 'せ':[{d:'M77 107 Q142 99 220 86',n:[68,99]},{d:'M177 52 Q174 109 165 151',n:[169,49]},{d:'M113 64 Q106 145 112 207 Q116 237 173 234 Q204 232 223 222',n:[104,61]}],
+ 'ぬ':[{d:'M92 70 Q102 139 129 195',n:[83,65]},{d:'M192 57 Q170 121 137 173 Q112 214 86 211 Q62 208 72 174 Q86 129 138 124 Q200 117 222 164 Q240 204 207 225 Q179 243 157 219 Q145 204 158 191 Q175 177 196 198',n:[184,53]}],
+ 'め':[{d:'M91 75 Q100 144 132 196',n:[82,70]},{d:'M194 60 Q170 126 139 174 Q111 215 84 210 Q61 205 73 172 Q89 129 139 124 Q195 120 221 156 Q242 188 223 215',n:[184,56]}],
+ 'れ':[{d:'M105 49 Q105 125 111 229',n:[96,46]},{d:'M74 110 Q108 99 133 90 M110 156 Q150 111 188 103 Q218 96 213 130 Q207 169 213 213 Q217 232 236 225',n:[66,105]}]
+};
+let activeWriteKana='あ';
+function openWritingFor(c){if(strokeDB[c])activeWriteKana=c;openSection('writing')}
+function renderWriting(){writingPicker.innerHTML='';Object.keys(strokeDB).forEach(k=>{let b=document.createElement('button');b.className='kana-pick'+(k===activeWriteKana?' active':'');b.textContent=k;b.onclick=()=>{activeWriteKana=k;renderWriting()};writingPicker.appendChild(b)});strokeTitle.textContent=activeWriteKana;ghost.textContent=activeWriteKana;modelCompare.textContent=activeWriteKana;compareArea.classList.add('hidden');drawStrokeSvg();clearCanvas();ghost.classList.add('hiddenGhost')}
+function drawStrokeSvg(){strokeSvg.innerHTML='';strokeDB[activeWriteKana].forEach((s,i)=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.d);p.setAttribute('class','stroke-path');p.dataset.i=i;strokeSvg.appendChild(p);let t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',s.n[0]);t.setAttribute('y',s.n[1]);t.setAttribute('class','stroke-num');t.textContent=i+1;strokeSvg.appendChild(t)})}
+function resetStrokes(){drawStrokeSvg()}
+function playStrokes(){drawStrokeSvg();let ps=[...strokeSvg.querySelectorAll('.stroke-path')];ps.forEach((p,i)=>setTimeout(()=>p.classList.add('play'),i*850))}
+function toggleGhost(){ghost.classList.toggle('hiddenGhost')}
+function showCompare(){studentCompare.src=canvas.toDataURL();compareArea.classList.remove('hidden');earn('kana')}
+
+const canvas=document.getElementById('drawCanvas'),ctx=canvas.getContext('2d');ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';let drawing=false;
+function cpos(e){let r=canvas.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:(p.clientX-r.left)*(canvas.width/r.width),y:(p.clientY-r.top)*(canvas.height/r.height)}}
+function down(e){drawing=true;let p=cpos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}function move(e){if(!drawing)return;let p=cpos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault()}function up(){drawing=false}
+canvas.addEventListener('mousedown',down);canvas.addEventListener('mousemove',move);window.addEventListener('mouseup',up);canvas.addEventListener('touchstart',down,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',up);function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);compareArea.classList.add('hidden')}
+
+let particleQuizIndex=0;
+function renderParticleDojo(){particleCards.innerHTML='';particleInfo.forEach(x=>{let d=document.createElement('button');d.className='particle-card';d.innerHTML='<strong>'+x[0]+'</strong><span>'+x[1]+'</span><div class="mini" style="margin-top:7px">'+x[2]+'</div>';d.onclick=()=>speakText(x[2]);particleCards.appendChild(d)});renderParticleQuiz()}
+function renderParticleQuiz(){let q=particleQuiz[particleQuizIndex];particleSentence.innerHTML=q.html;particleChoices.innerHTML='';particleFeedback.textContent='';q.opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...particleChoices.children].forEach(x=>x.disabled=true);if(o===q.a){b.classList.add('correct');particleFeedback.textContent='🌟 '+q.why;earn('particles')}else{b.classList.add('wrong');particleFeedback.textContent='Pista: '+q.why}};particleChoices.appendChild(b)})}
+function nextParticleQuiz(){particleQuizIndex=(particleQuizIndex+1)%particleQuiz.length;renderParticleQuiz()}
+
+let lessonNo=1,vocabIndex=0,speakIndex=0,grammarIndex=0,built=[];
+function openLesson(n){lessonNo=n;openSection('lessons');renderLesson();showLessonMode('vocab')}
+function renderLesson(){let L=lessons[lessonNo];lessonTitle.textContent=L.title;lessonSubtitle.textContent=L.subtitle;lessonChips.innerHTML='';for(let i=1;i<=5;i++){let b=document.createElement('button');b.className='lesson-chip'+(i===lessonNo?' active':'');b.textContent='Lección '+i;b.onclick=()=>{lessonNo=i;vocabIndex=0;speakIndex=0;grammarIndex=0;renderLesson();showLessonMode('vocab')};lessonChips.appendChild(b)}renderVocab();renderSpeak();renderLessonParticles();resetGrammar();renderBoss()}
+function showLessonMode(id){document.querySelectorAll('.lessonMode').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='listen')renderListen();if(id==='grammar')resetGrammar();if(id==='boss')renderBoss()}
+function currentVocab(){return lessons[lessonNo].vocab[vocabIndex%lessons[lessonNo].vocab.length]}
+function renderVocab(){let v=currentVocab();flash.classList.remove('flipped');flashJP.textContent=v[0];flashKanji.textContent=v[1]||v[0];flashMeaning.textContent=v[2]}
+function nextVocab(){vocabIndex=(vocabIndex+1)%lessons[lessonNo].vocab.length;renderVocab()}
+function markVocab(ok){if(ok)earn('vocab');nextVocab()}
+let listenItem=null;function renderListen(){let arr=lessons[lessonNo].vocab;listenItem=arr[Math.floor(Math.random()*arr.length)];let wrong=arr.filter(x=>x!==listenItem).map(x=>x[2]).sort(()=>Math.random()-.5).slice(0,3);let opts=[listenItem[2],...wrong].sort(()=>Math.random()-.5);listenChoices.innerHTML='';listenFeedback.textContent='';opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{if(o===listenItem[2]){b.classList.add('correct');listenFeedback.textContent='🎧 ¡Lo reconociste!';earn('listen')}else{b.classList.add('wrong');listenFeedback.textContent='Escucha otra vez.'}};listenChoices.appendChild(b)})}
+function playListen(){if(!listenItem)renderListen();speakText(listenItem[0])}
+function renderSpeak(){let s=lessons[lessonNo].speak[speakIndex%lessons[lessonNo].speak.length];speakPhrase.textContent=s[0];speakMeaning.textContent=s[1];speechResult.textContent='Pulsa el micrófono cuando estés lista.'}
+function nextSpeak(){speakIndex=(speakIndex+1)%lessons[lessonNo].speak.length;renderSpeak()}
+function renderLessonParticles(){lessonParticleInfo.innerHTML='';lessons[lessonNo].particles.forEach(x=>{let d=document.createElement('div');d.className='particle-card';d.innerHTML='<strong>'+x[0]+'</strong><span>'+x[1]+'</span><div class="mini" style="margin-top:7px">'+x[2]+'</div>';lessonParticleInfo.appendChild(d)})}
+function resetGrammar(){let g=lessons[lessonNo].grammar[grammarIndex%lessons[lessonNo].grammar.length];built=[];grammarPrompt.textContent=g.p;tokens.innerHTML='';sentenceZone.innerHTML='';grammarFeedback.textContent='';grammarTip.textContent=g.tip;grammarTip.classList.add('hidden');[...g.a].sort(()=>Math.random()-.5).forEach(t=>{let b=document.createElement('button');b.className='token';b.textContent=t;b.onclick=()=>{built.push(t);b.disabled=true;b.style.opacity=.35;let x=document.createElement('button');x.className='token';x.textContent=t;x.onclick=()=>{};sentenceZone.appendChild(x)};tokens.appendChild(b)})}
+function checkGrammar(){let g=lessons[lessonNo].grammar[grammarIndex%lessons[lessonNo].grammar.length];if(built.join('|')===g.a.join('|')){grammarFeedback.textContent='🌟 ¡Perfecto! '+g.a.join('');earn('grammar',2)}else grammarFeedback.textContent='🧩 Todavía no. Usa la pista o reinicia.'}
+function toggleGrammarTip(){grammarTip.classList.toggle('hidden')}
+function nextGrammar(){grammarIndex=(grammarIndex+1)%lessons[lessonNo].grammar.length;resetGrammar()}
+function renderBoss(){let bq=lessons[lessonNo].boss[Math.floor(Math.random()*lessons[lessonNo].boss.length)];bossPrompt.textContent=bq[0];bossChoices.innerHTML='';bossFeedback.textContent='';bq[2].forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...bossChoices.children].forEach(x=>x.disabled=true);if(o===bq[1]){b.classList.add('correct');bossFeedback.textContent='🏯 Boss vencido. +3 ⭐';stars+=3;scores.grammar++;save()}else{b.classList.add('wrong');bossFeedback.textContent='Casi. Respuesta: '+bq[1]}};bossChoices.appendChild(b)})}
+
+function speakText(t){if(!('speechSynthesis' in window)){alert('Este navegador no soporta síntesis de voz.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.82;speechSynthesis.speak(u)}
+function startRecognition(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){speechResult.textContent='El reconocimiento de voz suele funcionar mejor en Chrome/Edge. Puedes usar el botón de audio y evaluar oralmente.';return}let target=speakPhrase.textContent.replace(/[。！？\s]/g,'');let r=new SR();r.lang='ja-JP';r.interimResults=false;r.maxAlternatives=3;speechResult.textContent='🎙️ Escuchando...';r.onresult=e=>{let heard=[...e.results[0]].map(a=>a.transcript.replace(/[。！？\s]/g,''));let best=heard[0];let key=target.slice(0,Math.min(4,target.length));if(heard.some(x=>x.includes(key)||target.includes(x))){speechResult.textContent='Escuché: '+best+' — 🌟 ¡Muy bien!';earn('speak',2)}else speechResult.textContent='Escuché: '+best+' — 👍 Escucha y prueba otra vez.'};r.onerror=()=>speechResult.textContent='No pude escucharte. Intenta de nuevo.';r.start()}
+
+function renderLevel(){let data=[['Kana',scores.kana,12],['Vocabulario',scores.vocab,12],['Listening',scores.listen,10],['Speaking',scores.speak,8],['Gramática',scores.grammar,10],['Partículas',scores.particles,10]];statusGrid.innerHTML='';data.forEach(([name,val,max])=>{let pct=Math.min(100,Math.round(val/max*100));let d=document.createElement('div');d.className='skill';d.innerHTML='<b>'+name+'</b><div class="bar"><span style="width:'+pct+'%"></span></div><small>'+pct+'% · '+(pct>=75?'fuerte':pct>=40?'en recuperación':'prioridad')+'</small>';statusGrid.appendChild(d)});let weakest=[...data].sort((a,b)=>(a[1]/a[2])-(b[1]/b[2]))[0];routeNote.innerHTML='<b>Ruta sugerida:</b> La habilidad con menos evidencia por ahora es <b>'+weakest[0]+'</b>. Haz 5 minutos de esa sección y después prueba una lección Genki superior. Si responde con facilidad, avanza sin repetir todo.'}
+function resetProgress(){if(confirm('¿Reiniciar estrellas y diagnóstico?')){stars=0;scores={kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};save();renderLevel()}}
+
+renderKana();renderWriting();renderParticleDojo();renderLesson();
+</script>
+</body>
+</html>

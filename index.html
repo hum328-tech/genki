@@ -9,7 +9,7 @@
 *{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:linear-gradient(180deg,#fff8f7,#f4f7ff);color:var(--ink)}button{font:inherit;touch-action:manipulation}.app{max-width:1180px;margin:auto;padding:16px 16px 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#ef476f,#ff9ab3);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.brand h1{font-size:clamp(20px,3vw,31px);margin:0}.muted,.mini{color:var(--muted)}.mini{font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
 .section{display:none}.section.active{display:block}.panel{background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:var(--shadow);margin-top:16px}.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;background:linear-gradient(135deg,#fff,#fff2f5);border:1px solid #f4dce3;border-radius:28px;padding:22px;box-shadow:var(--shadow)}.hero h2{font-size:clamp(31px,5vw,52px);margin-bottom:8px}.mascot{min-height:210px;border-radius:24px;background:radial-gradient(circle at 48% 38%,#fff 0 23%,#ffd4df 24% 45%,#ff9bb4 46% 100%);display:grid;place-items:center;font-size:86px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.between{justify-content:space-between}.primary,.secondary,.success,.warning{border:0;border-radius:16px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:var(--pink);color:#fff}.secondary{background:#f2eff6;color:var(--ink)}.success{background:var(--green);color:#063d31}.warning{background:var(--yellow);color:#4c3900}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:16px}.menu{border:0;border-radius:22px;background:#fff;padding:18px;text-align:left;box-shadow:var(--shadow);cursor:pointer;transition:.16s}.menu:hover{transform:translateY(-3px)}.menu .ico{font-size:32px}.menu b{display:block;margin-top:7px;font-size:17px}.menu small{display:block;margin-top:4px;color:var(--muted);line-height:1.35}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{border:0;background:#f2eff6;border-radius:999px;padding:10px 14px;font-weight:750;cursor:pointer}.tab.active{background:#282530;color:#fff}.lesson-chips{display:flex;gap:10px;flex-wrap:wrap}.lesson-chip{border:2px solid transparent;background:#f5f2f8;border-radius:18px;padding:12px 14px;font-weight:800;cursor:pointer}.lesson-chip.active{border-color:var(--pink);background:#fff0f4}.mission-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.mission{border:0;background:#f7f5fa;border-radius:18px;padding:14px 8px;cursor:pointer;font-weight:800}.mission .ico{font-size:26px;display:block;margin-bottom:5px}.hidden{display:none!important}.note{background:#fff6d8;color:#59450d;border-radius:15px;padding:12px 14px;line-height:1.45}.goodnote{background:#ebfff8;color:#074a3a}.badnote{background:#fff0f3;color:#7b1f36}
 /* Kana */.kana-card{text-align:center;min-height:300px;display:grid;place-items:center}.kana{font-size:112px;line-height:1}.choices{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px;width:min(580px,100%);margin:14px auto 0}.choice{border:2px solid var(--line);background:#fff;border-radius:17px;padding:14px;font-size:19px;cursor:pointer}.choice.correct{border-color:var(--green);background:#ebfff8}.choice.wrong{border-color:var(--pink);background:#fff0f3}.feedback{font-weight:800;min-height:28px;margin-top:10px}
-/* Flashcards */.flash{perspective:1000px;max-width:720px;margin:auto}.flash-inner{position:relative;min-height:300px;transform-style:preserve-3d;transition:.45s;cursor:pointer}.flash.flipped .flash-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--line);display:grid;place-items:center;text-align:center;padding:22px;background:linear-gradient(135deg,#fff,#f8f4ff)}.back{transform:rotateY(180deg);background:linear-gradient(135deg,#fff7db,#fff)}.jp{font-size:clamp(42px,8vw,68px);font-weight:850}.meaning{font-size:26px}
+/* Flashcards */.mastery-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0}.bulbs{display:flex;align-items:center;gap:8px;font-weight:850}.bulb{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#ece8ef;color:#a39baa;box-shadow:inset 0 0 0 2px #ddd6e4;transition:.2s;filter:grayscale(1)}.bulb.on{background:#fff3a8;color:#ffad00;box-shadow:0 0 18px rgba(255,193,7,.65),inset 0 0 0 2px #ffd54f;filter:none;transform:scale(1.06)}.mastery-progress{flex:1;min-width:210px}.mastery-meter{height:12px;background:#eee9f1;border-radius:999px;overflow:hidden;margin-top:5px}.mastery-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--yellow));transition:.3s}.trophy{padding:28px;text-align:center;border-radius:24px;background:linear-gradient(135deg,#fff6c8,#fff,#eafff7);border:2px solid #ffe082}.trophy .cup{font-size:86px;display:block;animation:popCup .55s ease}@keyframes popCup{0%{transform:scale(.3) rotate(-15deg);opacity:0}75%{transform:scale(1.12) rotate(4deg)}100%{transform:scale(1);opacity:1}}.flash{perspective:1000px;max-width:720px;margin:auto}.flash-inner{position:relative;min-height:300px;transform-style:preserve-3d;transition:.45s;cursor:pointer}.flash.flipped .flash-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--line);display:grid;place-items:center;text-align:center;padding:22px;background:linear-gradient(135deg,#fff,#f8f4ff)}.back{transform:rotateY(180deg);background:linear-gradient(135deg,#fff7db,#fff)}.jp{font-size:clamp(42px,8vw,68px);font-weight:850}.meaning{font-size:26px}
 /* Grammar */.builder{display:grid;gap:12px}.tokens,.zone{min-height:65px;display:flex;gap:9px;flex-wrap:wrap;padding:11px;border-radius:17px;background:#f7f5fa}.zone{background:#fff;border:2px dashed #cfc7db}.token{border:0;background:#fff;border-radius:13px;padding:11px 14px;box-shadow:0 4px 12px rgba(0,0,0,.07);font-size:19px;cursor:pointer}.grammarPrompt{font-size:20px;font-weight:800}
 /* Particles */.particle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.particle-card{border:0;border-radius:20px;padding:16px;background:#f7f5fa;cursor:pointer;text-align:left}.particle-card strong{font-size:32px}.particle-card span{display:block;color:var(--muted);margin-top:4px}.particle-sentence{font-size:clamp(28px,5vw,48px);font-weight:850;text-align:center;margin:18px}.blank{display:inline-block;min-width:52px;border-bottom:4px solid var(--pink);color:var(--pink)}
 /* Speaking */.speak{text-align:center}.phrase{font-size:clamp(30px,6vw,60px);font-weight:850;margin:16px}.mic{width:82px;height:82px;border:0;border-radius:50%;background:var(--pink);color:#fff;font-size:32px;box-shadow:0 10px 22px rgba(239,71,111,.33);cursor:pointer}
@@ -75,7 +75,20 @@
       </div>
     </div>
 
-    <div id="vocab" class="panel lessonMode"><div class="row between"><div><h3>🃏 Flashcards</h3><div class="mini">Tócala para voltear. Escucha y luego repite sin mirar.</div></div><button class="secondary" onclick="speakText(currentVocab()[0])">🔊 Audio</button></div><div id="flash" class="flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="face"><div><div id="flashJP" class="jp"></div><div class="mini">Toca para revelar</div></div></div><div class="face back"><div><div id="flashKanji" class="jp" style="font-size:48px"></div><div id="flashMeaning" class="meaning"></div></div></div></div></div><div class="row" style="justify-content:center;margin-top:12px"><button class="warning" onclick="markVocab(false)">🔄 Repasar</button><button class="success" onclick="markVocab(true)">✓ La recuerdo</button><button class="primary" onclick="nextVocab()">Siguiente →</button></div></div>
+    <div id="vocab" class="panel lessonMode">
+      <div class="row between"><div><h3>🃏 Vocabulario · Memoria espaciada</h3><div class="mini">Cada palabra debe acertarse 2 veces, separadas por otras palabras. Si falla, sus focos se reinician.</div></div><button class="secondary" onclick="speakText(currentVocab()[0])">🔊 Audio</button></div>
+      <div class="mastery-head">
+        <div class="bulbs"><span>Memoria:</span><span id="bulb1" class="bulb">💡</span><span id="bulb2" class="bulb">💡</span></div>
+        <div class="mastery-progress"><div class="mini"><b id="masteredCount">0</b> / <span id="totalVocabCount">0</span> dominadas · <span id="remainingCount">0</span> pendientes</div><div class="mastery-meter"><span id="masteryBar"></span></div></div>
+        <button class="secondary" onclick="resetVocabRound()">↻ Reiniciar ronda</button>
+      </div>
+      <div id="vocabStudyArea">
+        <div id="flash" class="flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="face"><div><div id="flashJP" class="jp"></div><div class="mini">Toca para revelar</div></div></div><div class="face back"><div><div id="flashKanji" class="jp" style="font-size:48px"></div><div id="flashMeaning" class="meaning"></div></div></div></div></div>
+        <div id="vocabFeedback" class="feedback" style="text-align:center"></div>
+        <div class="row" style="justify-content:center;margin-top:12px"><button class="warning" onclick="markVocab(false)">✖ No la recordé</button><button class="success" onclick="markVocab(true)">✓ La recordé</button></div>
+      </div>
+      <div id="vocabTrophy" class="trophy hidden"><span class="cup">🏆</span><h2>¡Lección completada!</h2><p>Lograste recordar <b id="trophyTotal"></b> palabras dos veces con separación. Las palabras difíciles se repitieron hasta quedar dominadas.</p><button class="primary" onclick="resetVocabRound()">Practicar otra vez</button></div>
+    </div>
 
     <div id="listen" class="panel lessonMode hidden"><div style="text-align:center"><h3>🎧 Escucha y elige</h3><div class="mini">No leas la palabra primero. Escucha y busca el significado.</div><button class="primary" style="font-size:22px;margin:10px" onclick="playListen()">▶ Escuchar</button><div id="listenChoices" class="choices"></div><div id="listenFeedback" class="feedback"></div><button class="secondary" onclick="renderListen()">Otra palabra</button></div></div>
 
@@ -113,7 +126,37 @@ let kanaMode='hira',kanaIndex=0;
 
 const lessons={
 1:{title:'Mission 1 — New Friends',subtitle:'Presentarse, identificar personas/cosas, preguntas y の.',
- vocab:[['がくせい','学生','estudiante'],['せんせい','先生','maestro/a'],['ともだち','友達','amigo/a'],['にほん','日本','Japón'],['だいがく','大学','universidad'],['なまえ','名前','nombre'],['せんこう','専攻','especialidad / carrera'],['りゅうがくせい','留学生','estudiante internacional']],
+ vocab:[
+ ['あの','','eh... / este... (para llamar la atención o dudar)'],
+ ['いま','今','ahora'],
+ ['えいご','英語','inglés (idioma)'],
+ ['ええ','','sí'],
+ ['がくせい','学生','estudiante'],
+ ['～ご','～語','idioma / lengua (sufijo)'],
+ ['こうこう','高校','preparatoria / high school'],
+ ['ごご','午後','p. m. / por la tarde'],
+ ['ごぜん','午前','a. m. / por la mañana'],
+ ['～さい','～歳','... años de edad'],
+ ['～さん','','Sr. / Sra. / Srta. (tratamiento)'],
+ ['～じ','～時','... en punto / ... horas'],
+ ['～じん','～人','persona de... / nacionalidad'],
+ ['せんこう','専攻','especialidad / carrera'],
+ ['せんせい','先生','maestro/a; profesor/a'],
+ ['そうです','','así es / correcto'],
+ ['そうですか','','ya veo / ¿ah, sí?'],
+ ['だいがく','大学','universidad'],
+ ['でんわ','電話','teléfono'],
+ ['ともだち','友達','amigo/a'],
+ ['なまえ','名前','nombre'],
+ ['なん／なに','何','qué'],
+ ['にほん','日本','Japón'],
+ ['～ねんせい','～年生','estudiante de ... año'],
+ ['はい','','sí'],
+ ['はん','半','media / y media'],
+ ['ばんごう','番号','número'],
+ ['りゅうがくせい','留学生','estudiante internacional'],
+ ['わたし','私','yo']
+],
  speak:[['わたしはアナです。','Soy Ana.'],['せんこうはにほんごです。','Mi especialidad es japonés.'],['りゅうがくせいですか。','¿Eres estudiante internacional?']],
  grammar:[
   {p:'“Soy estudiante.”',a:['わたし','は','がくせい','です'],tip:'X は Y です identifica X como Y. は marca el tema.'},
@@ -213,13 +256,68 @@ function renderParticleQuiz(){let q=particleQuiz[particleQuizIndex];particleSent
 function nextParticleQuiz(){particleQuizIndex=(particleQuizIndex+1)%particleQuiz.length;renderParticleQuiz()}
 
 let lessonNo=1,vocabIndex=0,speakIndex=0,grammarIndex=0,built=[];
-function openLesson(n){lessonNo=n;openSection('lessons');renderLesson();showLessonMode('vocab')}
-function renderLesson(){let L=lessons[lessonNo];lessonTitle.textContent=L.title;lessonSubtitle.textContent=L.subtitle;lessonChips.innerHTML='';for(let i=1;i<=5;i++){let b=document.createElement('button');b.className='lesson-chip'+(i===lessonNo?' active':'');b.textContent='Lección '+i;b.onclick=()=>{lessonNo=i;vocabIndex=0;speakIndex=0;grammarIndex=0;renderLesson();showLessonMode('vocab')};lessonChips.appendChild(b)}renderVocab();renderSpeak();renderLessonParticles();resetGrammar();renderBoss()}
-function showLessonMode(id){document.querySelectorAll('.lessonMode').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='listen')renderListen();if(id==='grammar')resetGrammar();if(id==='boss')renderBoss()}
-function currentVocab(){return lessons[lessonNo].vocab[vocabIndex%lessons[lessonNo].vocab.length]}
-function renderVocab(){let v=currentVocab();flash.classList.remove('flipped');flashJP.textContent=v[0];flashKanji.textContent=v[1]||v[0];flashMeaning.textContent=v[2]}
-function nextVocab(){vocabIndex=(vocabIndex+1)%lessons[lessonNo].vocab.length;renderVocab()}
-function markVocab(ok){if(ok)earn('vocab');nextVocab()}
+let vocabSession=null;
+const VOCAB_STORE_KEY='jpVocabMastery3';
+function vocabId(v){return v[0]+'__'+v[2]}
+function loadAllMastery(){try{return JSON.parse(localStorage.getItem(VOCAB_STORE_KEY)||'{}')}catch(e){return {}}}
+function saveVocabSession(){if(!vocabSession)return;let all=loadAllMastery();all[lessonNo]={turn:vocabSession.turn,items:{}};vocabSession.items.forEach(x=>{all[lessonNo].items[x.id]={hits:x.hits,dueAt:x.dueAt}});localStorage.setItem(VOCAB_STORE_KEY,JSON.stringify(all))}
+function initVocabSession(force=false){
+  const arr=lessons[lessonNo].vocab, saved=loadAllMastery()[lessonNo];
+  vocabSession={turn:0,current:null,last:null,items:arr.map((v,i)=>({id:vocabId(v),index:i,hits:0,dueAt:0}))};
+  if(saved&&!force){
+    vocabSession.turn=Number(saved.turn)||0;
+    vocabSession.items.forEach(x=>{let z=saved.items&&saved.items[x.id];if(z){x.hits=Math.max(0,Math.min(2,Number(z.hits)||0));x.dueAt=Number(z.dueAt)||0}})
+  }
+  chooseNextVocab(true);
+}
+function openLesson(n){lessonNo=n;openSection('lessons');initVocabSession();renderLesson();showLessonMode('vocab')}
+function renderLesson(){let L=lessons[lessonNo];lessonTitle.textContent=L.title;lessonSubtitle.textContent=L.subtitle;lessonChips.innerHTML='';for(let i=1;i<=5;i++){let b=document.createElement('button');b.className='lesson-chip'+(i===lessonNo?' active':'');b.textContent='Lección '+i;b.onclick=()=>{lessonNo=i;vocabIndex=0;speakIndex=0;grammarIndex=0;initVocabSession();renderLesson();showLessonMode('vocab')};lessonChips.appendChild(b)}if(!vocabSession)initVocabSession();renderVocab();renderSpeak();renderLessonParticles();resetGrammar();renderBoss()}
+function showLessonMode(id){document.querySelectorAll('.lessonMode').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='vocab'){if(!vocabSession)initVocabSession();renderVocab()}if(id==='listen')renderListen();if(id==='grammar')resetGrammar();if(id==='boss')renderBoss()}
+function currentVocab(){if(!vocabSession||vocabSession.current===null)return lessons[lessonNo].vocab[0];return lessons[lessonNo].vocab[vocabSession.current]}
+function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function chooseNextVocab(initial=false){
+  if(!vocabSession)return;
+  const active=vocabSession.items.filter(x=>x.hits<2);
+  if(!active.length){vocabSession.current=null;saveVocabSession();return}
+  let eligible=active.filter(x=>x.dueAt<=vocabSession.turn && x.index!==vocabSession.last);
+  if(!eligible.length) eligible=active.filter(x=>x.index!==vocabSession.last);
+  if(!eligible.length) eligible=active;
+  // Prioriza palabras nunca vistas cuando hay varias disponibles; después mezcla las que deben regresar.
+  let unseen=eligible.filter(x=>x.hits===0 && x.dueAt===0);
+  let pool=unseen.length && Math.random()<0.65 ? unseen : eligible;
+  let pick=pool[Math.floor(Math.random()*pool.length)];
+  vocabSession.current=pick.index;vocabIndex=pick.index;
+}
+function renderVocab(){
+  if(!vocabSession)initVocabSession();
+  const total=vocabSession.items.length, mastered=vocabSession.items.filter(x=>x.hits>=2).length;
+  totalVocabCount.textContent=total;masteredCount.textContent=mastered;remainingCount.textContent=total-mastered;masteryBar.style.width=(total?mastered/total*100:0)+'%';
+  if(mastered===total){vocabStudyArea.classList.add('hidden');vocabTrophy.classList.remove('hidden');trophyTotal.textContent=total;return}
+  vocabStudyArea.classList.remove('hidden');vocabTrophy.classList.add('hidden');
+  if(vocabSession.current===null)chooseNextVocab();
+  let v=currentVocab(), st=vocabSession.items.find(x=>x.index===vocabSession.current);
+  flash.classList.remove('flipped');flashJP.textContent=v[0];flashKanji.textContent=v[1]||v[0];flashMeaning.textContent=v[2];
+  bulb1.classList.toggle('on',st.hits>=1);bulb2.classList.toggle('on',st.hits>=2);vocabFeedback.textContent=st.hits===1?'💡 Ya la acertó una vez. Debe recordarla otra vez más adelante.':' ';
+}
+function markVocab(ok){
+  if(!vocabSession||vocabSession.current===null)return;
+  let st=vocabSession.items.find(x=>x.index===vocabSession.current), answeredIndex=st.index;
+  vocabSession.turn++;
+  if(ok){
+    st.hits=Math.min(2,st.hits+1);earn('vocab');
+    if(st.hits===1){st.dueAt=vocabSession.turn+randInt(4,5);vocabFeedback.textContent='💡 Primer foco encendido. Volverá después de varias palabras.'}
+    else{st.dueAt=999999;vocabFeedback.textContent='💡💡 ¡Dominada! Ya no volverá a salir en esta ronda.'}
+  }else{
+    st.hits=0;st.dueAt=vocabSession.turn+randInt(3,5);vocabFeedback.textContent='💡 Focos apagados. La volveremos a intentar después de otras palabras.';
+  }
+  vocabSession.last=answeredIndex;saveVocabSession();
+  setTimeout(()=>{chooseNextVocab();saveVocabSession();renderVocab()},520);
+}
+function nextVocab(){chooseNextVocab();renderVocab()}
+function resetVocabRound(){
+  if(!confirm('¿Reiniciar la ronda de vocabulario de esta lección?'))return;
+  let all=loadAllMastery();delete all[lessonNo];localStorage.setItem(VOCAB_STORE_KEY,JSON.stringify(all));initVocabSession(true);renderVocab();
+}
 let listenItem=null;function renderListen(){let arr=lessons[lessonNo].vocab;listenItem=arr[Math.floor(Math.random()*arr.length)];let wrong=arr.filter(x=>x!==listenItem).map(x=>x[2]).sort(()=>Math.random()-.5).slice(0,3);let opts=[listenItem[2],...wrong].sort(()=>Math.random()-.5);listenChoices.innerHTML='';listenFeedback.textContent='';opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{if(o===listenItem[2]){b.classList.add('correct');listenFeedback.textContent='🎧 ¡Lo reconociste!';earn('listen')}else{b.classList.add('wrong');listenFeedback.textContent='Escucha otra vez.'}};listenChoices.appendChild(b)})}
 function playListen(){if(!listenItem)renderListen();speakText(listenItem[0])}
 function renderSpeak(){let s=lessons[lessonNo].speak[speakIndex%lessons[lessonNo].speak.length];speakPhrase.textContent=s[0];speakMeaning.textContent=s[1];speechResult.textContent='Pulsa el micrófono cuando estés lista.'}

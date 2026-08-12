@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Nihongo Comeback! — Genki 1–10</title>
+<title>Nihongo Comeback! — Genki 1–10 · v8 FIX</title>
 <style>
 :root{--bg:#fff8f7;--card:#fff;--ink:#25232b;--muted:#6f6878;--pink:#ef476f;--yellow:#ffd166;--green:#06d6a0;--blue:#4cc9f0;--purple:#8b5cf6;--line:#ece7f0;--shadow:0 14px 34px rgba(45,28,60,.12)}
 *{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:linear-gradient(180deg,#fff8f7,#f4f7ff);color:var(--ink)}button{font:inherit;touch-action:manipulation}.app{max-width:1180px;margin:auto;padding:16px 16px 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#ef476f,#ff9ab3);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.brand h1{font-size:clamp(20px,3vw,31px);margin:0}.muted,.mini{color:var(--muted)}.mini{font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
@@ -48,7 +48,7 @@
 
 <div class="app">
   <header class="topbar">
-    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10</div></div></div>
+    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10 · v8 FIX</div></div></div>
     <div class="pill">⭐ <span id="stars">0</span></div>
   </header>
 
@@ -236,6 +236,57 @@ const particleCards=$('particleCards'),particleSentence=$('particleSentence'),pa
 const lessonTitle=$('lessonTitle'),lessonSubtitle=$('lessonSubtitle'),lessonChips=$('lessonChips'),bulb1=$('bulb1'),bulb2=$('bulb2'),masteredCount=$('masteredCount'),totalVocabCount=$('totalVocabCount'),remainingCount=$('remainingCount'),masteryBar=$('masteryBar'),vocabStudyArea=$('vocabStudyArea'),flash=$('flash'),flashJP=$('flashJP'),flashKanji=$('flashKanji'),flashMeaning=$('flashMeaning'),vocabFeedback=$('vocabFeedback'),vocabTrophy=$('vocabTrophy'),trophyTotal=$('trophyTotal');
 const listenChoices=$('listenChoices'),listenFeedback=$('listenFeedback'),speakPhrase=$('speakPhrase'),speakMeaning=$('speakMeaning'),speechResult=$('speechResult'),grammarPrompt=$('grammarPrompt'),tokens=$('tokens'),sentenceZone=$('sentenceZone'),grammarFeedback=$('grammarFeedback'),grammarTip=$('grammarTip'),lessonParticles=$('lessonParticles'),lessonParticleInfo=$('lessonParticleInfo'),bossPrompt=$('bossPrompt'),bossChoices=$('bossChoices'),bossFeedback=$('bossFeedback'),statusGrid=$('statusGrid'),routeNote=$('routeNote');
 
+
+// ===== NÚCLEO DE NAVEGACIÓN Y PROGRESO =====
+// En v7 este bloque faltaba: por eso la contraseña funcionaba, pero openSection()
+// no existía y los botones del menú no podían navegar.
+let starCount = Number(localStorage.getItem('jpStars2') || 0);
+let scores;
+try {
+  scores = JSON.parse(localStorage.getItem('jpScores2') || '{"kana":0,"vocab":0,"listen":0,"speak":0,"grammar":0,"particles":0}');
+} catch(e) {
+  scores = {kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};
+}
+stars.textContent = starCount;
+
+function save(){
+  localStorage.setItem('jpStars2', String(starCount));
+  localStorage.setItem('jpScores2', JSON.stringify(scores));
+  stars.textContent = starCount;
+}
+
+function earn(skill,n=1){
+  starCount += n;
+  scores[skill] = (scores[skill] || 0) + 1;
+  save();
+}
+
+function openSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(id);
+  if(!target){
+    console.error('Sección no encontrada:',id);
+    return;
+  }
+  target.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  if(id==='vocabLab'){
+    initLessonChecks();
+    if(!gvSession) startGlobalVocabSession(true);
+  }
+  if(id==='kana'){
+    if(!kanaSession) initKanaSession();
+    else drawNextKanaQuestion();
+  }
+  if(id==='writing') renderWriting();
+  if(id==='particles') renderParticleDojo();
+  if(id==='level') renderLevel();
+}
+
+function goHome(){ openSection('home'); }
+
+
 const basicHira=[
  ['あ','a'],['い','i'],['う','u'],['え','e'],['お','o'],['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko'],
  ['さ','sa'],['し','shi'],['す','su'],['せ','se'],['そ','so'],['た','ta'],['ち','chi'],['つ','tsu'],['て','te'],['と','to'],
@@ -384,13 +435,13 @@ function resetGrammar(){let g=lessons[lessonNo].grammar[grammarIndex%lessons[les
 function checkGrammar(){let g=lessons[lessonNo].grammar[grammarIndex%lessons[lessonNo].grammar.length];if(built.join('|')===g.a.join('|')){grammarFeedback.textContent='🌟 ¡Perfecto! '+g.a.join('');earn('grammar',2)}else grammarFeedback.textContent='🧩 Todavía no. Usa la pista o reinicia.'}
 function toggleGrammarTip(){grammarTip.classList.toggle('hidden')}
 function nextGrammar(){grammarIndex=(grammarIndex+1)%lessons[lessonNo].grammar.length;resetGrammar()}
-function renderBoss(){let bq=lessons[lessonNo].boss[Math.floor(Math.random()*lessons[lessonNo].boss.length)];bossPrompt.textContent=bq[0];bossChoices.innerHTML='';bossFeedback.textContent='';bq[2].forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...bossChoices.children].forEach(x=>x.disabled=true);if(o===bq[1]){b.classList.add('correct');bossFeedback.textContent='🏯 Boss vencido. +3 ⭐';stars+=3;scores.grammar++;save()}else{b.classList.add('wrong');bossFeedback.textContent='Casi. Respuesta: '+bq[1]}};bossChoices.appendChild(b)})}
+function renderBoss(){let bq=lessons[lessonNo].boss[Math.floor(Math.random()*lessons[lessonNo].boss.length)];bossPrompt.textContent=bq[0];bossChoices.innerHTML='';bossFeedback.textContent='';bq[2].forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...bossChoices.children].forEach(x=>x.disabled=true);if(o===bq[1]){b.classList.add('correct');bossFeedback.textContent='🏯 Boss vencido. +3 ⭐';starCount+=3;scores.grammar=(scores.grammar||0)+1;save()}else{b.classList.add('wrong');bossFeedback.textContent='Casi. Respuesta: '+bq[1]}};bossChoices.appendChild(b)})}
 
 function speakText(t){if(!('speechSynthesis' in window)){alert('Este navegador no soporta síntesis de voz.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.82;speechSynthesis.speak(u)}
 function startRecognition(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){speechResult.textContent='El reconocimiento de voz suele funcionar mejor en Chrome/Edge. Puedes usar el botón de audio y evaluar oralmente.';return}let target=speakPhrase.textContent.replace(/[。！？\s]/g,'');let r=new SR();r.lang='ja-JP';r.interimResults=false;r.maxAlternatives=3;speechResult.textContent='🎙️ Escuchando...';r.onresult=e=>{let heard=[...e.results[0]].map(a=>a.transcript.replace(/[。！？\s]/g,''));let best=heard[0];let key=target.slice(0,Math.min(4,target.length));if(heard.some(x=>x.includes(key)||target.includes(x))){speechResult.textContent='Escuché: '+best+' — 🌟 ¡Muy bien!';earn('speak',2)}else speechResult.textContent='Escuché: '+best+' — 👍 Escucha y prueba otra vez.'};r.onerror=()=>speechResult.textContent='No pude escucharte. Intenta de nuevo.';r.start()}
 
 function renderLevel(){let data=[['Kana',scores.kana,12],['Vocabulario',scores.vocab,12],['Listening',scores.listen,10],['Speaking',scores.speak,8],['Gramática',scores.grammar,10],['Partículas',scores.particles,10]];statusGrid.innerHTML='';data.forEach(([name,val,max])=>{let pct=Math.min(100,Math.round(val/max*100));let d=document.createElement('div');d.className='skill';d.innerHTML='<b>'+name+'</b><div class="bar"><span style="width:'+pct+'%"></span></div><small>'+pct+'% · '+(pct>=75?'fuerte':pct>=40?'en recuperación':'prioridad')+'</small>';statusGrid.appendChild(d)});let weakest=[...data].sort((a,b)=>(a[1]/a[2])-(b[1]/b[2]))[0];routeNote.innerHTML='<b>Ruta sugerida:</b> La habilidad con menos evidencia por ahora es <b>'+weakest[0]+'</b>. Haz 5 minutos de esa sección y después prueba una lección Genki superior. Si responde con facilidad, avanza sin repetir todo.'}
-function resetProgress(){if(confirm('¿Reiniciar estrellas y diagnóstico?')){stars=0;scores={kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};save();renderLevel()}}
+function resetProgress(){if(confirm('¿Reiniciar estrellas y diagnóstico?')){starCount=0;scores={kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};save();renderLevel()}}
 
 renderKana();renderWriting();renderParticleDojo();renderLesson();
 

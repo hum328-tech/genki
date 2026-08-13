@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Nihongo Comeback! — Genki 1–10 · v11 TRANSCRIPCIÓN CONECTADA</title>
+<title>Nihongo Comeback! — Genki 1–10 · v13 REFRESH + PARTICLES</title>
 <style>
 :root{--bg:#fff8f7;--card:#fff;--ink:#25232b;--muted:#6f6878;--pink:#ef476f;--yellow:#ffd166;--green:#06d6a0;--blue:#4cc9f0;--purple:#8b5cf6;--line:#ece7f0;--shadow:0 14px 34px rgba(45,28,60,.12)}
 *{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:linear-gradient(180deg,#fff8f7,#f4f7ff);color:var(--ink)}button{font:inherit;touch-action:manipulation}.app{max-width:1180px;margin:auto;padding:16px 16px 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#ef476f,#ff9ab3);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.brand h1{font-size:clamp(20px,3vw,31px);margin:0}.muted,.mini{color:var(--muted)}.mini{font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
@@ -48,7 +48,7 @@
 
 <div class="app">
   <header class="topbar">
-    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10 · v11 TRANSCRIPCIÓN CONECTADA</div></div></div>
+    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10 · v13 REFRESH + PARTICLES</div></div></div>
     <div class="pill">⭐ <span id="stars">0</span></div>
   </header>
 
@@ -87,10 +87,12 @@
 
         <label class="control-box">Modo
           <select id="vocabModeSelect" onchange="startGlobalVocabSession(true)">
-            <option value="mixed">🎲 Mixto</option>
-            <option value="mc">✅ Opción múltiple</option>
+            <option value="mixed">🎲 Mixto · todos los formatos</option>
+            <option value="read">👀 Leer japonés → elegir significado</option>
+            <option value="reverse">🔄 Significado → elegir japonés</option>
+            <option value="audio">🎧 Escuchar → elegir significado</option>
             <option value="cards">🃏 Tarjetas</option>
-            <option value="audio">🎧 Escucha y elige</option>
+            <option value="pronounce">🎙️ Pronunciar vocabulario</option>
           </select>
         </label>
 
@@ -298,6 +300,8 @@ function openSection(id){
     return;
   }
   target.classList.add('active');
+  safeStorage.set('jpCurrentSection',id);
+  if(id==='lessons') safeStorage.set('jpCurrentLesson',String(lessonNo));
   window.scrollTo({top:0,behavior:'smooth'});
 
   if(id==='vocabLab'){
@@ -409,9 +413,33 @@ const particleQuiz=[
  {html:'ねこ <span class="blank">___</span> います。',a:'が',opts:['が','を','で','へ'],spoken:'ねこがいます。',why:'が marca aquello que existe.'}
 ];
 
-let particleQuizIndex=0;
+let particleQuizIndex=0,lastParticleCorrectPos=-1;
 function renderParticleDojo(){particleCards.innerHTML='';particleInfo.forEach(x=>{let d=document.createElement('button');d.className='particle-card';d.innerHTML='<strong>'+x[0]+'</strong><span>'+x[1]+'</span><div class="mini" style="margin-top:7px">'+x[2]+'</div>';d.onclick=()=>speakText(x[2]);particleCards.appendChild(d)});renderParticleQuiz()}
-function renderParticleQuiz(){let q=particleQuiz[particleQuizIndex];particleSentence.innerHTML=q.html;particleChoices.innerHTML='';particleFeedback.textContent='';q.opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...particleChoices.children].forEach(x=>x.disabled=true);if(o===q.a){b.classList.add('correct');particleFeedback.textContent='🌟 '+q.why;earn('particles')}else{b.classList.add('wrong');particleFeedback.textContent='Pista: '+q.why}};particleChoices.appendChild(b)})}
+function renderParticleQuiz(){
+  let q=particleQuiz[particleQuizIndex];
+  particleSentence.innerHTML=q.html;particleChoices.innerHTML='';particleFeedback.textContent='';
+  let opts=gvShuffle(q.opts);
+  let correctPos=opts.indexOf(q.a);
+  if(opts.length>1 && correctPos===lastParticleCorrectPos){
+    let swap=(correctPos+1+Math.floor(Math.random()*(opts.length-1)))%opts.length;
+    [opts[correctPos],opts[swap]]=[opts[swap],opts[correctPos]];
+    correctPos=swap;
+  }
+  lastParticleCorrectPos=correctPos;
+  opts.forEach(o=>{
+    let b=document.createElement('button');b.className='choice';b.textContent=o;
+    b.onclick=()=>{
+      [...particleChoices.children].forEach(x=>x.disabled=true);
+      if(o===q.a){b.classList.add('correct');particleFeedback.textContent='🌟 '+q.why;earn('particles')}
+      else{
+        b.classList.add('wrong');
+        [...particleChoices.children].forEach(x=>{if(x.textContent===q.a)x.classList.add('correct')});
+        particleFeedback.textContent='Pista: '+q.why;
+      }
+    };
+    particleChoices.appendChild(b)
+  })
+}
 function nextParticleQuiz(){particleQuizIndex=(particleQuizIndex+1)%particleQuiz.length;renderParticleQuiz()}
 
 let lessonNo=1,vocabIndex=0,speakIndex=0,grammarIndex=0,built=[];
@@ -429,7 +457,7 @@ function initVocabSession(force=false){
   }
   chooseNextVocab(true);
 }
-function openLesson(n){lessonNo=n;openSection('lessons');initVocabSession();renderLesson();showLessonMode('vocab')}
+function openLesson(n){lessonNo=n;safeStorage.set('jpCurrentLesson',String(n));openSection('lessons');initVocabSession();renderLesson();showLessonMode('vocab')}
 function renderLesson(){
   let L=lessons[lessonNo];
   lessonTitle.textContent=L.title;
@@ -439,7 +467,7 @@ function renderLesson(){
     let b=document.createElement('button');
     b.className='lesson-chip'+(i===lessonNo?' active':'');
     b.textContent='Lección '+i;
-    b.onclick=()=>{lessonNo=i;vocabIndex=0;speakIndex=0;grammarIndex=0;initVocabSession(true);renderLesson();showLessonMode('vocab')};
+    b.onclick=()=>{lessonNo=i;safeStorage.set('jpCurrentLesson',String(i));vocabIndex=0;speakIndex=0;grammarIndex=0;initVocabSession(true);renderLesson();showLessonMode('vocab')};
     lessonChips.appendChild(b)
   }
   if(!vocabSession)initVocabSession();
@@ -497,17 +525,31 @@ function resetVocabRound(){
 }
 let listenItem=null;function renderListen(){let arr=lessons[lessonNo].vocab;listenItem=arr[Math.floor(Math.random()*arr.length)];let wrong=arr.filter(x=>x!==listenItem).map(x=>x[2]).sort(()=>Math.random()-.5).slice(0,3);let opts=[listenItem[2],...wrong].sort(()=>Math.random()-.5);listenChoices.innerHTML='';listenFeedback.textContent='';opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{if(o===listenItem[2]){b.classList.add('correct');listenFeedback.textContent='🎧 ¡Lo reconociste!';earn('listen')}else{b.classList.add('wrong');listenFeedback.textContent='Escucha otra vez.'}};listenChoices.appendChild(b)})}
 function playListen(){if(!listenItem)renderListen();speakText(listenItem[0])}
+let lastSpeakVocabIndex=-1;
+
+function getSpeakVocab(){
+  const arr=(lessons[lessonNo] && lessons[lessonNo].vocab) ? lessons[lessonNo].vocab : [];
+  if(!arr.length) return null;
+  let idx=Math.floor(Math.random()*arr.length);
+  if(arr.length>1 && idx===lastSpeakVocabIndex) idx=(idx+1+Math.floor(Math.random()*(arr.length-1)))%arr.length;
+  lastSpeakVocabIndex=idx;
+  return arr[idx];
+}
+
 function renderSpeak(){
-  let arr=lessons[lessonNo].speak||[];
-  if(!arr.length){
-    speakPhrase.textContent='Vocabulario oral';
-    speakMeaning.textContent='En esta lección, usa el botón de vocabulario o escucha para practicar las palabras cargadas.';
-    speechResult.textContent='El contenido gramatical/oral específico todavía no se ha añadido para esta lección.';
+  const v=getSpeakVocab();
+  if(!v){
+    speakPhrase.textContent='Sin vocabulario';
+    speakMeaning.textContent='';
+    speechResult.textContent='No hay palabras cargadas en esta lección.';
     return;
   }
-  let s=arr[speakIndex%arr.length];speakPhrase.textContent=s[0];speakMeaning.textContent=s[1];speechResult.textContent='Pulsa el micrófono cuando estés lista.'
+  speakPhrase.textContent=v[0];
+  speakMeaning.innerHTML=(v[1] ? '<b>'+v[1]+'</b> · ' : '')+v[2];
+  speechResult.textContent='Escucha la palabra y después pulsa el micrófono para pronunciarla.';
 }
-function nextSpeak(){let arr=lessons[lessonNo].speak||[];if(!arr.length)return; speakIndex=(speakIndex+1)%arr.length;renderSpeak()}
+
+function nextSpeak(){ renderSpeak(); }
 function renderLessonParticles(){
   lessonParticleInfo.innerHTML='';
   let arr=lessons[lessonNo].particles||[];
@@ -539,7 +581,36 @@ function nextGrammar(){let arr=lessons[lessonNo].grammar||[];if(!arr.length)retu
 function renderBoss(){let bq=lessons[lessonNo].boss[Math.floor(Math.random()*lessons[lessonNo].boss.length)];bossPrompt.textContent=bq[0];bossChoices.innerHTML='';bossFeedback.textContent='';bq[2].forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...bossChoices.children].forEach(x=>x.disabled=true);if(o===bq[1]){b.classList.add('correct');bossFeedback.textContent='🏯 Boss vencido. +3 ⭐';starCount+=3;scores.grammar=(scores.grammar||0)+1;save()}else{b.classList.add('wrong');bossFeedback.textContent='Casi. Respuesta: '+bq[1]}};bossChoices.appendChild(b)})}
 
 function speakText(t){if(!('speechSynthesis' in window)){alert('Este navegador no soporta síntesis de voz.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.82;speechSynthesis.speak(u)}
-function startRecognition(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){speechResult.textContent='El reconocimiento de voz suele funcionar mejor en Chrome/Edge. Puedes usar el botón de audio y evaluar oralmente.';return}let target=speakPhrase.textContent.replace(/[。！？\s]/g,'');let r=new SR();r.lang='ja-JP';r.interimResults=false;r.maxAlternatives=3;speechResult.textContent='🎙️ Escuchando...';r.onresult=e=>{let heard=[...e.results[0]].map(a=>a.transcript.replace(/[。！？\s]/g,''));let best=heard[0];let key=target.slice(0,Math.min(4,target.length));if(heard.some(x=>x.includes(key)||target.includes(x))){speechResult.textContent='Escuché: '+best+' — 🌟 ¡Muy bien!';earn('speak',2)}else speechResult.textContent='Escuché: '+best+' — 👍 Escucha y prueba otra vez.'};r.onerror=()=>speechResult.textContent='No pude escucharte. Intenta de nuevo.';r.start()}
+function normalizeJapanese(s){
+  return (s||'').replace(/[。！？、・\s〜～（）()＋+]/g,'').toLowerCase();
+}
+function startRecognition(){
+  let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    speechResult.textContent='El reconocimiento de voz funciona mejor en Chrome o Edge. Puedes escuchar y evaluar oralmente.';
+    return;
+  }
+  let target=normalizeJapanese(speakPhrase.textContent);
+  let r=new SR();
+  r.lang='ja-JP';
+  r.interimResults=false;
+  r.maxAlternatives=5;
+  speechResult.textContent='🎙️ Escuchando...';
+  r.onresult=e=>{
+    let heard=[...e.results[0]].map(a=>normalizeJapanese(a.transcript));
+    let best=[...e.results[0]][0].transcript;
+    let exact=heard.some(x=>x===target);
+    let close=heard.some(x=>x.includes(target)||target.includes(x));
+    if(exact || close){
+      speechResult.textContent='Escuché: '+best+' — 🌟 ¡Muy bien!';
+      earn('speak',2);
+    }else{
+      speechResult.textContent='Escuché: '+best+' — 🔁 Escucha otra vez e inténtalo de nuevo.';
+    }
+  };
+  r.onerror=()=>speechResult.textContent='No pude escucharte. Intenta otra vez.';
+  r.start();
+}
 
 function renderLevel(){let data=[['Kana',scores.kana,12],['Vocabulario',scores.vocab,12],['Listening',scores.listen,10],['Speaking',scores.speak,8],['Gramática',scores.grammar,10],['Partículas',scores.particles,10]];statusGrid.innerHTML='';data.forEach(([name,val,max])=>{let pct=Math.min(100,Math.round(val/max*100));let d=document.createElement('div');d.className='skill';d.innerHTML='<b>'+name+'</b><div class="bar"><span style="width:'+pct+'%"></span></div><small>'+pct+'% · '+(pct>=75?'fuerte':pct>=40?'en recuperación':'prioridad')+'</small>';statusGrid.appendChild(d)});let weakest=[...data].sort((a,b)=>(a[1]/a[2])-(b[1]/b[2]))[0];routeNote.innerHTML='<b>Ruta sugerida:</b> La habilidad con menos evidencia por ahora es <b>'+weakest[0]+'</b>. Haz 5 minutos de esa sección y después prueba una lección Genki superior. Si responde con facilidad, avanza sin repetir todo.'}
 function resetProgress(){if(confirm('¿Reiniciar estrellas y diagnóstico?')){starCount=0;scores={kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};save();renderLevel()}}
@@ -634,7 +705,7 @@ function startGlobalVocabSession(force=false){
   initLessonChecks();
   const items=buildGVItems();
   if(!items.length) return;
-  gvSession={items,turn:0,current:null,last:null,queue:gvShuffle(items.map(x=>x.id)),mode:document.getElementById('vocabModeSelect').value};
+  gvSession={items,turn:0,current:null,last:null,queue:gvShuffle(items.map(x=>x.id)),mode:document.getElementById('vocabModeSelect').value,modeBag:[],recentDistractors:[]};
   document.getElementById('gvTrophy').classList.add('hidden');
   document.getElementById('gvStudy').classList.remove('hidden');
   renderGVStats();
@@ -682,8 +753,10 @@ function renderGVStats(){
 function gvModeForQuestion(){
   const mode=gvSession.mode;
   if(mode!=='mixed') return mode;
-  const modes=['mc','cards','audio','reverse'];
-  return modes[Math.floor(Math.random()*modes.length)];
+  if(!gvSession.modeBag || gvSession.modeBag.length===0){
+    gvSession.modeBag=gvShuffle(['read','reverse','audio','cards','pronounce']);
+  }
+  return gvSession.modeBag.pop();
 }
 function nextGlobalVocab(first=false){
   if(!gvSession) return startGlobalVocabSession(true);
@@ -705,42 +778,90 @@ function renderGlobalVocabQuestion(){
         reveal=document.getElementById('gvReveal'),cardButtons=document.getElementById('gvCardButtons'),revealBtn=document.getElementById('gvRevealBtn'),
         nextBtn=document.getElementById('gvNextBtn'),audioBtn=document.getElementById('gvAudioBtn');
   lessonTag.textContent='Lección '+q.lesson;
-  choices.innerHTML=''; feedback.textContent=''; reveal.classList.add('hidden'); cardButtons.classList.add('hidden'); revealBtn.classList.add('hidden'); nextBtn.classList.add('hidden');
-  audioBtn.classList.remove('hidden'); kanji.textContent='';
+  choices.innerHTML='';
+  feedback.textContent='';
+  reveal.classList.add('hidden');
+  cardButtons.classList.add('hidden');
+  revealBtn.classList.add('hidden');
+  nextBtn.classList.add('hidden');
+  audioBtn.classList.remove('hidden');
+  kanji.textContent='';
 
   const mode=gvModeForQuestion();
   gvSession.questionMode=mode;
 
+  if(mode==='pronounce'){
+    label.textContent='🎙️ Escucha y pronuncia';
+    prompt.textContent=q.kana;
+    kanji.textContent=q.kanji||'';
+    choices.innerHTML='<button class="secondary" onclick="playGlobalVocabAudio()">🔊 Escuchar</button><button class="mic" onclick="startGlobalVocabRecognition()">🎙️</button>';
+    feedback.textContent='Escucha y después pulsa el micrófono.';
+    return;
+  }
+
   if(mode==='cards'){
-    label.textContent='Tarjeta · ¿Qué significa?';
-    prompt.textContent=q.kana; kanji.textContent=q.kanji||'';
+    label.textContent='🃏 Tarjeta · ¿Qué significa?';
+    prompt.textContent=q.kana;
+    kanji.textContent=q.kanji||'';
     revealBtn.classList.remove('hidden');
     return;
   }
+
   if(mode==='audio'){
-    label.textContent='Escucha y elige el significado';
-    prompt.textContent='🎧'; kanji.textContent='';
-    setTimeout(()=>playGlobalVocabAudio(),250);
+    label.textContent='🎧 Escucha y elige el significado';
+    prompt.textContent='🎧';
+    kanji.textContent='';
+    setTimeout(()=>playGlobalVocabAudio(),300);
     renderGVChoices('meaning');
     return;
   }
+
   if(mode==='reverse'){
-    label.textContent='¿Cuál palabra japonesa corresponde?';
-    prompt.textContent=q.meaning; kanji.textContent='';
+    label.textContent='🔄 ¿Cuál palabra japonesa significa esto?';
+    prompt.textContent=q.meaning;
+    kanji.textContent='';
     audioBtn.classList.add('hidden');
     renderGVChoices('kana');
     return;
   }
-  label.textContent='¿Qué significa?';
-  prompt.textContent=q.kana; kanji.textContent=q.kanji||'';
+
+  // READ MODE: explicit Japanese reading multiple choice
+  label.textContent='👀 Lee la palabra japonesa y elige su significado';
+  prompt.textContent=q.kana;
+  kanji.textContent=q.kanji||'';
   renderGVChoices('meaning');
 }
 function renderGVChoices(kind){
-  const q=currentGV(), pool=gvSession.items.filter(x=>x.id!==q.id);
+  const q=currentGV();
   const correct=kind==='meaning'?q.meaning:q.kana;
-  let distract=gvShuffle(pool).map(x=>kind==='meaning'?x.meaning:x.kana).filter((x,i,a)=>x!==correct&&a.indexOf(x)===i).slice(0,3);
-  gvShuffle([correct,...distract]).forEach(opt=>{
-    const b=document.createElement('button');b.className='choice';b.textContent=opt;b.onclick=()=>answerGlobalChoice(opt===correct,b,correct);document.getElementById('gvChoices').appendChild(b);
+
+  // Prefer distractors from different positions/lessons and avoid recycling the exact same trio.
+  let pool=gvShuffle(gvSession.items.filter(x=>x.id!==q.id));
+  let values=[];
+  for(const x of pool){
+    const val=kind==='meaning'?x.meaning:x.kana;
+    if(val===correct || values.includes(val)) continue;
+    if(gvSession.recentDistractors && gvSession.recentDistractors.includes(val) && pool.length>8) continue;
+    values.push(val);
+    if(values.length===3) break;
+  }
+  if(values.length<3){
+    for(const x of pool){
+      const val=kind==='meaning'?x.meaning:x.kana;
+      if(val!==correct && !values.includes(val)) values.push(val);
+      if(values.length===3) break;
+    }
+  }
+
+  gvSession.recentDistractors=values.slice();
+  const finalOptions=gvShuffle([correct,...values]);
+
+  finalOptions.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='choice';
+    b.textContent=opt;
+    b.onclick=()=>answerGlobalChoice(opt===correct,b,correct);
+    document.getElementById('gvChoices').appendChild(b);
   });
 }
 function answerGlobalChoice(ok,btn,correct){
@@ -761,7 +882,57 @@ function answerGlobalCard(ok){
   document.getElementById('gvFeedback').textContent=ok?'💡 Guardado. Volverá más adelante para comprobar retención.':'🔁 Se reinician sus focos y volverá a aparecer.';
   renderGVStats();document.getElementById('gvNextBtn').classList.remove('hidden');
 }
+function startGlobalVocabRecognition(){
+  const q=currentGV(); if(!q)return;
+  let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const feedback=document.getElementById('gvFeedback');
+  if(!SR){
+    feedback.textContent='El reconocimiento de voz funciona mejor en Chrome o Edge.';
+    return;
+  }
+  const target=normalizeJapanese(q.kana);
+  let r=new SR();
+  r.lang='ja-JP';
+  r.interimResults=false;
+  r.maxAlternatives=5;
+  feedback.textContent='🎙️ Escuchando...';
+  r.onresult=e=>{
+    const raw=[...e.results[0]].map(a=>a.transcript);
+    const heard=raw.map(normalizeJapanese);
+    const ok=heard.some(x=>x===target || x.includes(target) || target.includes(x));
+    if(ok){
+      feedback.textContent='Escuché: '+raw[0]+' — 🌟 ¡Muy bien!';
+      gvSchedule(q,true);
+      earn('speak',2);
+    }else{
+      feedback.textContent='Escuché: '+raw[0]+' — 🔁 Intenta otra vez.';
+      gvSchedule(q,false);
+    }
+    renderGVStats();
+    document.getElementById('gvNextBtn').classList.remove('hidden');
+  };
+  r.onerror=()=>feedback.textContent='No pude escucharte. Intenta otra vez.';
+  r.start();
+}
+
 function playGlobalVocabAudio(){const q=currentGV();if(q)speakText(q.kana.replace(/[～（）＋]/g,''))}
+
+
+window.addEventListener('load',()=>{
+  const savedLesson=Number(safeStorage.get('jpCurrentLesson')||1);
+  if(savedLesson>=1 && savedLesson<=10) lessonNo=savedLesson;
+  const savedSection=safeStorage.get('jpCurrentSection')||'home';
+  const valid=['home','vocabLab','kana','writing','particles','lessons','level'];
+  const target=valid.includes(savedSection)?savedSection:'home';
+  if(target==='lessons'){
+    openSection('lessons');
+    initVocabSession();
+    renderLesson();
+    showLessonMode('vocab');
+  }else{
+    openSection(target);
+  }
+});
 
 </script>
 </body>

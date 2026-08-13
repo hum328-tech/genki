@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Nihongo Comeback! — Genki 1–10 · v8 FIX</title>
+<title>Nihongo Comeback! — Genki 1–10 · v10 VOCAB FIX</title>
 <style>
 :root{--bg:#fff8f7;--card:#fff;--ink:#25232b;--muted:#6f6878;--pink:#ef476f;--yellow:#ffd166;--green:#06d6a0;--blue:#4cc9f0;--purple:#8b5cf6;--line:#ece7f0;--shadow:0 14px 34px rgba(45,28,60,.12)}
 *{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:linear-gradient(180deg,#fff8f7,#f4f7ff);color:var(--ink)}button{font:inherit;touch-action:manipulation}.app{max-width:1180px;margin:auto;padding:16px 16px 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#ef476f,#ff9ab3);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.brand h1{font-size:clamp(20px,3vw,31px);margin:0}.muted,.mini{color:var(--muted)}.mini{font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
@@ -48,7 +48,7 @@
 
 <div class="app">
   <header class="topbar">
-    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10 · v8 FIX</div></div></div>
+    <div class="brand"><div class="logo">🌸</div><div><h1>Nihongo Comeback!</h1><div class="mini">Repaso diagnóstico — Genki I · Vocabulario 1–10 · v10 VOCAB FIX</div></div></div>
     <div class="pill">⭐ <span id="stars">0</span></div>
   </header>
 
@@ -230,6 +230,35 @@
 <script>
 // DOM references explícitas: evita que el navegador bloquee funciones por no crear variables globales desde los IDs.
 const $=id=>document.getElementById(id);
+
+// Almacenamiento seguro: algunos visores de HTML bloquean localStorage/sessionStorage.
+// Si están bloqueados, la app sigue funcionando usando memoria temporal.
+const memoryStore = {};
+const safeStorage = {
+  get(key){
+    try { return localStorage.getItem(key); }
+    catch(e){ return Object.prototype.hasOwnProperty.call(memoryStore,key) ? memoryStore[key] : null; }
+  },
+  set(key,val){
+    try { localStorage.setItem(key,String(val)); }
+    catch(e){ memoryStore[key]=String(val); }
+  },
+  remove(key){
+    try { localStorage.removeItem(key); }
+    catch(e){ delete memoryStore[key]; }
+  }
+};
+const safeSession = {
+  get(key){
+    try { return sessionStorage.getItem(key); }
+    catch(e){ return Object.prototype.hasOwnProperty.call(memoryStore,'session_'+key) ? memoryStore['session_'+key] : null; }
+  },
+  set(key,val){
+    try { sessionStorage.setItem(key,String(val)); }
+    catch(e){ memoryStore['session_'+key]=String(val); }
+  }
+};
+
 const stars=$('stars'),hiraTab=$('hiraTab'),kataTab=$('kataTab'),kanaChar=$('kanaChar'),kanaRomajiPrompt=$('kanaRomajiPrompt'),kanaChoices=$('kanaChoices'),kanaFeedback=$('kanaFeedback'),kanaDirectionLabel=$('kanaDirectionLabel'),kanaMasteredCount=$('kanaMasteredCount'),kanaRetryCount=$('kanaRetryCount'),kanaAttemptCount=$('kanaAttemptCount'),kanaNextBtn=$('kanaNextBtn'),kanaQuizArea=$('kanaQuizArea'),kanaComplete=$('kanaComplete'),kanaCompleteText=$('kanaCompleteText');
 const writingPicker=$('writingPicker'),strokeTitle=$('strokeTitle'),strokeOrderImg=$('strokeOrderImg'),strokeLoading=$('strokeLoading'),ghost=$('ghost'),compareArea=$('compareArea'),modelCompare=$('modelCompare'),studentCompare=$('studentCompare');
 const particleCards=$('particleCards'),particleSentence=$('particleSentence'),particleChoices=$('particleChoices'),particleFeedback=$('particleFeedback');
@@ -240,18 +269,18 @@ const listenChoices=$('listenChoices'),listenFeedback=$('listenFeedback'),speakP
 // ===== NÚCLEO DE NAVEGACIÓN Y PROGRESO =====
 // En v7 este bloque faltaba: por eso la contraseña funcionaba, pero openSection()
 // no existía y los botones del menú no podían navegar.
-let starCount = Number(localStorage.getItem('jpStars2') || 0);
+let starCount = Number(safeStorage.get('jpStars2') || 0);
 let scores;
 try {
-  scores = JSON.parse(localStorage.getItem('jpScores2') || '{"kana":0,"vocab":0,"listen":0,"speak":0,"grammar":0,"particles":0}');
+  scores = JSON.parse(safeStorage.get('jpScores2') || '{"kana":0,"vocab":0,"listen":0,"speak":0,"grammar":0,"particles":0}');
 } catch(e) {
   scores = {kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};
 }
 stars.textContent = starCount;
 
 function save(){
-  localStorage.setItem('jpStars2', String(starCount));
-  localStorage.setItem('jpScores2', JSON.stringify(scores));
+  safeStorage.set('jpStars2', String(starCount));
+  safeStorage.set('jpScores2', JSON.stringify(scores));
   stars.textContent = starCount;
 }
 
@@ -358,6 +387,28 @@ function cpos(e){let r=canvas.getBoundingClientRect(),p=e.touches?e.touches[0]:e
 function down(e){drawing=true;let p=cpos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}function move(e){if(!drawing)return;let p=cpos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault()}function up(){drawing=false}
 canvas.addEventListener('mousedown',down);canvas.addEventListener('mousemove',move);window.addEventListener('mouseup',up);canvas.addEventListener('touchstart',down,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',up);function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);compareArea.classList.add('hidden')}
 
+
+const particleInfo=[
+ ['は','Tema / contraste','わたしは がくせいです。'],
+ ['の','Posesión / relación','メアリーの ほん'],
+ ['も','También','わたしも がくせいです。'],
+ ['を','Objeto directo','ほんを よみます。'],
+ ['で','Lugar donde ocurre una acción','としょかんで よみます。'],
+ ['に','Destino / hora / lugar de existencia','7じに おきます。'],
+ ['へ','Dirección','にほんへ いきます。'],
+ ['が','Sujeto de existencia / gusto','ねこが います。']
+];
+const particleQuiz=[
+ {html:'わたし <span class="blank">___</span> がくせいです。',a:'は',opts:['は','を','で','に'],spoken:'わたしはがくせいです。',why:'は marca el tema.'},
+ {html:'ほん <span class="blank">___</span> よみます。',a:'を',opts:['を','で','へ','の'],spoken:'ほんをよみます。',why:'を marca el objeto directo.'},
+ {html:'としょかん <span class="blank">___</span> べんきょうします。',a:'で',opts:['で','に','を','も'],spoken:'としょかんでべんきょうします。',why:'で marca el lugar donde ocurre la acción.'},
+ {html:'7じ <span class="blank">___</span> おきます。',a:'に',opts:['に','で','を','の'],spoken:'しちじにおきます。',why:'に marca una hora específica.'},
+ {html:'きょうと <span class="blank">___</span> いきます。',a:'へ',opts:['へ','を','の','も'],spoken:'きょうとへいきます。',why:'へ marca dirección.'},
+ {html:'メアリー <span class="blank">___</span> ほん',a:'の',opts:['の','は','で','を'],spoken:'メアリーのほん',why:'の conecta dos sustantivos.'},
+ {html:'わたし <span class="blank">___</span> にほんごをべんきょうします。',a:'も',opts:['も','を','が','へ'],spoken:'わたしもにほんごをべんきょうします。',why:'も significa también.'},
+ {html:'ねこ <span class="blank">___</span> います。',a:'が',opts:['が','を','で','へ'],spoken:'ねこがいます。',why:'が marca aquello que existe.'}
+];
+
 let particleQuizIndex=0;
 function renderParticleDojo(){particleCards.innerHTML='';particleInfo.forEach(x=>{let d=document.createElement('button');d.className='particle-card';d.innerHTML='<strong>'+x[0]+'</strong><span>'+x[1]+'</span><div class="mini" style="margin-top:7px">'+x[2]+'</div>';d.onclick=()=>speakText(x[2]);particleCards.appendChild(d)});renderParticleQuiz()}
 function renderParticleQuiz(){let q=particleQuiz[particleQuizIndex];particleSentence.innerHTML=q.html;particleChoices.innerHTML='';particleFeedback.textContent='';q.opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{[...particleChoices.children].forEach(x=>x.disabled=true);if(o===q.a){b.classList.add('correct');particleFeedback.textContent='🌟 '+q.why;earn('particles')}else{b.classList.add('wrong');particleFeedback.textContent='Pista: '+q.why}};particleChoices.appendChild(b)})}
@@ -367,8 +418,8 @@ let lessonNo=1,vocabIndex=0,speakIndex=0,grammarIndex=0,built=[];
 let vocabSession=null;
 const VOCAB_STORE_KEY='jpVocabMastery3';
 function vocabId(v){return v[0]+'__'+v[2]}
-function loadAllMastery(){try{return JSON.parse(localStorage.getItem(VOCAB_STORE_KEY)||'{}')}catch(e){return {}}}
-function saveVocabSession(){if(!vocabSession)return;let all=loadAllMastery();all[lessonNo]={turn:vocabSession.turn,items:{}};vocabSession.items.forEach(x=>{all[lessonNo].items[x.id]={hits:x.hits,dueAt:x.dueAt}});localStorage.setItem(VOCAB_STORE_KEY,JSON.stringify(all))}
+function loadAllMastery(){try{return JSON.parse(safeStorage.get(VOCAB_STORE_KEY)||'{}')}catch(e){return {}}}
+function saveVocabSession(){if(!vocabSession)return;let all=loadAllMastery();all[lessonNo]={turn:vocabSession.turn,items:{}};vocabSession.items.forEach(x=>{all[lessonNo].items[x.id]={hits:x.hits,dueAt:x.dueAt}});safeStorage.set(VOCAB_STORE_KEY,JSON.stringify(all))}
 function initVocabSession(force=false){
   const arr=lessons[lessonNo].vocab, saved=loadAllMastery()[lessonNo];
   vocabSession={turn:0,current:null,last:null,items:arr.map((v,i)=>({id:vocabId(v),index:i,hits:0,dueAt:0}))};
@@ -424,7 +475,7 @@ function markVocab(ok){
 function nextVocab(){chooseNextVocab();renderVocab()}
 function resetVocabRound(){
   if(!confirm('¿Reiniciar la ronda de vocabulario de esta lección?'))return;
-  let all=loadAllMastery();delete all[lessonNo];localStorage.setItem(VOCAB_STORE_KEY,JSON.stringify(all));initVocabSession(true);renderVocab();
+  let all=loadAllMastery();delete all[lessonNo];safeStorage.set(VOCAB_STORE_KEY,JSON.stringify(all));initVocabSession(true);renderVocab();
 }
 let listenItem=null;function renderListen(){let arr=lessons[lessonNo].vocab;listenItem=arr[Math.floor(Math.random()*arr.length)];let wrong=arr.filter(x=>x!==listenItem).map(x=>x[2]).sort(()=>Math.random()-.5).slice(0,3);let opts=[listenItem[2],...wrong].sort(()=>Math.random()-.5);listenChoices.innerHTML='';listenFeedback.textContent='';opts.forEach(o=>{let b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>{if(o===listenItem[2]){b.classList.add('correct');listenFeedback.textContent='🎧 ¡Lo reconociste!';earn('listen')}else{b.classList.add('wrong');listenFeedback.textContent='Escucha otra vez.'}};listenChoices.appendChild(b)})}
 function playListen(){if(!listenItem)renderListen();speakText(listenItem[0])}
@@ -443,14 +494,14 @@ function startRecognition(){let SR=window.SpeechRecognition||window.webkitSpeech
 function renderLevel(){let data=[['Kana',scores.kana,12],['Vocabulario',scores.vocab,12],['Listening',scores.listen,10],['Speaking',scores.speak,8],['Gramática',scores.grammar,10],['Partículas',scores.particles,10]];statusGrid.innerHTML='';data.forEach(([name,val,max])=>{let pct=Math.min(100,Math.round(val/max*100));let d=document.createElement('div');d.className='skill';d.innerHTML='<b>'+name+'</b><div class="bar"><span style="width:'+pct+'%"></span></div><small>'+pct+'% · '+(pct>=75?'fuerte':pct>=40?'en recuperación':'prioridad')+'</small>';statusGrid.appendChild(d)});let weakest=[...data].sort((a,b)=>(a[1]/a[2])-(b[1]/b[2]))[0];routeNote.innerHTML='<b>Ruta sugerida:</b> La habilidad con menos evidencia por ahora es <b>'+weakest[0]+'</b>. Haz 5 minutos de esa sección y después prueba una lección Genki superior. Si responde con facilidad, avanza sin repetir todo.'}
 function resetProgress(){if(confirm('¿Reiniciar estrellas y diagnóstico?')){starCount=0;scores={kana:0,vocab:0,listen:0,speak:0,grammar:0,particles:0};save();renderLevel()}}
 
-renderKana();renderWriting();renderParticleDojo();renderLesson();
+// Inicialización bajo demanda: cada sección se renderiza solamente al abrirla.
 
 // ===== ACCESO =====
 function unlockApp(){
   const input=document.getElementById('passwordInput');
   const err=document.getElementById('passwordError');
   if(input.value==='123'){
-    sessionStorage.setItem('nihongoUnlocked','1');
+    safeSession.set('nihongoUnlocked','1');
     document.getElementById('passwordGate').style.display='none';
   }else{
     err.textContent='Contraseña incorrecta';
@@ -460,7 +511,7 @@ function unlockApp(){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   const gate=document.getElementById('passwordGate');
-  if(sessionStorage.getItem('nihongoUnlocked')==='1') gate.style.display='none';
+  if(safeSession.get('nihongoUnlocked')==='1') gate.style.display='none';
   const pi=document.getElementById('passwordInput');
   if(pi) pi.addEventListener('keydown',e=>{if(e.key==='Enter')unlockApp()});
 });
